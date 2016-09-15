@@ -13,8 +13,25 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    util/AutoEnumerate.cpp \
+    util/Utils.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    util/Patch.h \
+    util/AutoEnumerate.h \
+    util/Utils.h \
+    graph/Edge.h \
+    graph/Flow.h \
+    graph/FlowPtrComparator.h \
+    graph/Graph.h \
+    graph/Node.h
 
 FORMS    += mainwindow.ui
+
+INCLUDEPATH += X:/boost_1_61_0
+INCLUDEPATH += X:/machineCreator/lib
+
+DISTFILES += \
+    configuration/log.ini
+
