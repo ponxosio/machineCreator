@@ -46,8 +46,7 @@ SOURCES += main.cpp\
     operables/mathematics/UnaryOperation.cpp \
     operables/mathematics/VariableEntry.cpp \
     operables/VariableTable.cpp \
-    pythonPlugins/EVOPROGv2/utilities/TinyWire-master/TinyWireS/TinyWireS.cpp \
-    pythonPlugins/EVOPROGv2/utilities/TinyWire-master/TinyWireS/usiTwiSlave.c
+    gui/customimagegraphicsitem.cpp
 
 HEADERS  += mainwindow.h \
     util/Patch.h \
@@ -101,8 +100,62 @@ HEADERS  += mainwindow.h \
     operables/mathematics/UnaryOperation.h \
     operables/mathematics/VariableEntry.h \
     operables/VariableTable.h \
-    pythonPlugins/EVOPROGv2/utilities/TinyWire-master/TinyWireS/TinyWireS.h \
-    pythonPlugins/EVOPROGv2/utilities/TinyWire-master/TinyWireS/usiTwiSlave.h
+    operables/comparison/ComparisonOperable.h \
+    lib/cereal/archives/adapters.hpp \
+    lib/cereal/archives/binary.hpp \
+    lib/cereal/archives/json.hpp \
+    lib/cereal/archives/portable_binary.hpp \
+    lib/cereal/archives/xml.hpp \
+    lib/cereal/details/helpers.hpp \
+    lib/cereal/details/polymorphic_impl.hpp \
+    lib/cereal/details/static_object.hpp \
+    lib/cereal/details/traits.hpp \
+    lib/cereal/details/util.hpp \
+    lib/cereal/external/rapidjson/internal/pow10.h \
+    lib/cereal/external/rapidjson/internal/stack.h \
+    lib/cereal/external/rapidjson/internal/strfunc.h \
+    lib/cereal/external/rapidjson/document.h \
+    lib/cereal/external/rapidjson/filestream.h \
+    lib/cereal/external/rapidjson/genericstream.h \
+    lib/cereal/external/rapidjson/prettywriter.h \
+    lib/cereal/external/rapidjson/rapidjson.h \
+    lib/cereal/external/rapidjson/reader.h \
+    lib/cereal/external/rapidjson/stringbuffer.h \
+    lib/cereal/external/rapidjson/writer.h \
+    lib/cereal/external/rapidxml/rapidxml.hpp \
+    lib/cereal/external/rapidxml/rapidxml_iterators.hpp \
+    lib/cereal/external/rapidxml/rapidxml_print.hpp \
+    lib/cereal/external/rapidxml/rapidxml_utils.hpp \
+    lib/cereal/external/base64.hpp \
+    lib/cereal/types/array.hpp \
+    lib/cereal/types/base_class.hpp \
+    lib/cereal/types/bitset.hpp \
+    lib/cereal/types/boost_variant.hpp \
+    lib/cereal/types/chrono.hpp \
+    lib/cereal/types/common.hpp \
+    lib/cereal/types/complex.hpp \
+    lib/cereal/types/deque.hpp \
+    lib/cereal/types/forward_list.hpp \
+    lib/cereal/types/list.hpp \
+    lib/cereal/types/map.hpp \
+    lib/cereal/types/memory.hpp \
+    lib/cereal/types/polymorphic.hpp \
+    lib/cereal/types/queue.hpp \
+    lib/cereal/types/set.hpp \
+    lib/cereal/types/stack.hpp \
+    lib/cereal/types/string.hpp \
+    lib/cereal/types/tuple.hpp \
+    lib/cereal/types/unordered_map.hpp \
+    lib/cereal/types/unordered_set.hpp \
+    lib/cereal/types/utility.hpp \
+    lib/cereal/types/valarray.hpp \
+    lib/cereal/types/vector.hpp \
+    lib/cereal/access.hpp \
+    lib/cereal/cereal.hpp \
+    lib/cereal/macros.hpp \
+    lib/json/json.hpp \
+    lib/easylogging++.h \
+    gui/customimagegraphicsitem.h
 
 FORMS    += mainwindow.ui
 

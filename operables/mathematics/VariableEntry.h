@@ -13,7 +13,7 @@
 #include <stdexcept>
 
 //local
-#include "../../ExecutionServer.h"
+//#include "../../ExecutionServer.h"
 #include "../../util/Utils.h"
 #include "../VariableTable.h"
 #include "MathematicOperable.h"
@@ -78,13 +78,14 @@ protected:
 	std::string reference;
 
 	inline std::shared_ptr<VariableTable> getVariableTable() throw (std::invalid_argument) {
-		try {
+        /*try {
 			return ExecutionServer::GetInstance()->getEvoCoder(reference)->getVariableTable();
 		}
 		catch (std::invalid_argument & e)
 		{
 			throw(std::invalid_argument("VariableEntry::getVariableTable(), " + std::string(e.what())));
-		}
+        }*/
+        return NULL;
 	}
 };
 
