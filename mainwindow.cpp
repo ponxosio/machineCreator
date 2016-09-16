@@ -9,16 +9,59 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QGraphicsScene* scene = new QGraphicsScene(this);
 
-    QGraphicsPixmapItem* picItem = new QGraphicsPixmapItem(QPixmap("X:/machineCreator/Img/unknow.png"));
-    picItem->setFlag(QGraphicsItem::ItemIsMovable);
-    picItem->setFlag(QGraphicsItem::ItemIsSelectable);
-
+    CustomContainerItem* picItem = new CustomContainerItem(QPixmap("X:/machineCreator/Img/unknow.png"), NULL, ui->statusBar);
     scene->addItem(picItem);
 
     ui->graphicsView->setScene(scene);
+    ui->statusBar->showMessage("Ready");
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+// SLOTS
+
+void MainWindow:: addContainer() {
+
+}
+
+void MainWindow::removeContainer(){
+
+}
+
+void MainWindow::connectContainers() {
+
+}
+
+void MainWindow::saveMachine() {
+
+}
+
+void MainWindow::openMachine() {
+
+}
+
+void MainWindow::managePlugins() {
+
+}
+
+void MainWindow::about() {
+}
+
+void MainWindow::makeToolBar() {
+
+}
+
+void MainWindow::zoomIn() {
+
+}
+
+void MainWindow::zoomOut() {
+
+}
+
+void MainWindow::editContainer() {
+
 }
