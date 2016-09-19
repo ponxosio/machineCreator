@@ -4,7 +4,11 @@
 #include <QMainWindow>
 #include <QGraphicsPixmapItem>
 
-# include "gui/customcontaineritem.h"
+# include "gui/graphicsmanager.h"
+# include "fluidControl/executable/containers/InletContainer.h"
+# include "fluidControl/executable/containers/SinkContainer.h"
+# include "plugin/actuators/ExtractorPlugin.h"
+# include "plugin/actuators/InjectorPlugin.h"
 
 namespace Ui {
 class MainWindow;

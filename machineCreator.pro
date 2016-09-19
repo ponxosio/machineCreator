@@ -46,7 +46,9 @@ SOURCES += main.cpp\
     operables/mathematics/UnaryOperation.cpp \
     operables/mathematics/VariableEntry.cpp \
     operables/VariableTable.cpp \
-    gui/customcontaineritem.cpp
+    gui/customcontaineritem.cpp \
+    gui/customedgegraphicsitem.cpp \
+    gui/graphicsmanager.cpp
 
 HEADERS  += mainwindow.h \
     util/Patch.h \
@@ -156,7 +158,9 @@ HEADERS  += mainwindow.h \
     lib/json/json.hpp \
     lib/easylogging++.h \
     operables/ComparisonOperable.h \
-    gui/customcontaineritem.h
+    gui/customcontaineritem.h \
+    gui/customedgegraphicsitem.h \
+    gui/graphicsmanager.h
 
 FORMS    += mainwindow.ui
 

@@ -9,8 +9,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QGraphicsScene* scene = new QGraphicsScene(this);
 
-    CustomContainerItem* picItem = new CustomContainerItem(QPixmap("X:/machineCreator/Img/unknow.png"), NULL, ui->statusBar);
-    scene->addItem(picItem);
+    GraphicsManager manager(scene);
+
+    vector<string> paramsce{ "7", "1" };
+    std::shared_ptr<Extractor> cExtractor13(
+                new ExtractorPlugin(communications, "EvoprogV2Pump", paramsce));
+
+    vector<string> paramsdi;
+    std::shared_ptr<Injector> dummyInjector(
+                new InjectorPlugin(communications, "EvoprogDummyInjector", paramsdi));
+
+    ExecutableMachineGraph::ExecutableContainerNodePtr cInlet1 = std::make_shared<InletContainer>(1, 100.0, cExtractor13);
+    ExecutableMachineGraph::ExecutableContainerNodePtr sink2 = std::make_shared<SinkContainer>(2, 100.0, dummyInjector);
+
+    manager.addContainer(cInlet1);
+    manager.addContainer(sink2);
 
     ui->graphicsView->setScene(scene);
     ui->statusBar->showMessage("Ready");
