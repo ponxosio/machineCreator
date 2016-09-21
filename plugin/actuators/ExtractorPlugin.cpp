@@ -3,16 +3,15 @@
 using namespace boost::python;
 
 ExtractorPlugin::ExtractorPlugin() :
-	Extractor()
+    Extractor(), SelfConfiguringPlugin()
 {
 	this->pluginType = "";
 	this->referenceName = "";
 }
 
 ExtractorPlugin::ExtractorPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-	Extractor(communications)
+    Extractor(communications), SelfConfiguringPlugin(pluginType)
 {
-	this->pluginType = std::string(pluginType);
 	this->params = std::vector<std::string>(params);
 	this->referenceName = "";
 }

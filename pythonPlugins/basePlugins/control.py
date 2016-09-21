@@ -7,9 +7,10 @@ class Control(object):
 		"""constructor"""
 		self.maxconnections = maxConnections
 
-	def getParamsType(self):
+	@classmethod
+	def getParamsType(cls):
 		"""must return a list with the types expected at the params variable in the init function"""
-		return ["int"]
+		return {"max_connections":"int"}
 
 	@abc.abstractmethod
 	def getInstructions(self):

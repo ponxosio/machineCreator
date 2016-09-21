@@ -48,7 +48,9 @@ SOURCES += main.cpp\
     operables/VariableTable.cpp \
     gui/customcontaineritem.cpp \
     gui/customedgegraphicsitem.cpp \
-    gui/graphicsmanager.cpp
+    gui/graphicsmanager.cpp \
+    gui/pluginmanager.cpp \
+    plugin/actuators/selfconfiguringplugin.cpp
 
 HEADERS  += mainwindow.h \
     util/Patch.h \
@@ -160,7 +162,9 @@ HEADERS  += mainwindow.h \
     operables/ComparisonOperable.h \
     gui/customcontaineritem.h \
     gui/customedgegraphicsitem.h \
-    gui/graphicsmanager.h
+    gui/graphicsmanager.h \
+    gui/pluginmanager.h \
+    plugin/actuators/selfconfiguringplugin.h
 
 FORMS    += mainwindow.ui
 
@@ -224,5 +228,27 @@ DISTFILES += \
     Img/odsensor.png \
     Img/sink.png \
     Img/temperature.png \
-    Img/unknow.png
+    Img/unknow.png \
+    ico/about.png \
+    ico/add.png \
+    ico/configuration.png \
+    ico/connect.png \
+    ico/edit.png \
+    ico/export.png \
+    ico/open.png \
+    ico/remove.png \
+    ico/zoom-in.png \
+    ico/zoom-out.png \
+    ico/add.ico \
+    ico/configuration.ico \
+    ico/connect.ico \
+    ico/edit.ico \
+    ico/export.ico \
+    ico/open.ico \
+    ico/remove.ico \
+    ico/zoom-in.ico \
+    ico/zoom-out.ico
+
+RESOURCES += \
+    icons.qrc
 

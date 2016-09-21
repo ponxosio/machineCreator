@@ -8,6 +8,7 @@
 #include "..\..\fluidControl\executable\containers\actuators\extras\Temperature.h"
 #include "..\..\fluidControl\executable\containers\actuators\communications\CommunicationsInterface.h"
 #include "..\PythonEnvironment.h"
+#include "selfconfiguringplugin.h"
 
 //cereal
 #include <cereal/cereal.hpp>
@@ -17,7 +18,7 @@
 
 
 class TemperaturePlugin :
-	public Temperature
+    public Temperature, SelfConfiguringPlugin
 {
 public:
 	TemperaturePlugin();
@@ -32,7 +33,6 @@ public:
 	void serialize(Archive & ar, std::uint32_t const version);
 
 protected:
-	std::string pluginType;
 	std::vector<std::string> params;
 
 	std::string referenceName;
@@ -43,7 +43,7 @@ inline void TemperaturePlugin::serialize(Archive& ar,
 	const std::uint32_t version) {
 	if (version <= 1) {
 		Temperature::serialize(ar, version);
-		ar(CEREAL_NVP(pluginType), CEREAL_NVP(params));
+        ar(CEREAL_NVP(params));
 	}
 }
 

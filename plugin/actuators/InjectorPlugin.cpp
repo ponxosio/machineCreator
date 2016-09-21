@@ -3,17 +3,15 @@
 using namespace boost::python;
 
 InjectorPlugin::InjectorPlugin() :
-	Injector()
+    Injector(),SelfConfiguringPlugin()
 {
-	this->pluginType = "";
 	this->referenceName = "";
 }
 
 InjectorPlugin::InjectorPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-	Injector(communications)
+    Injector(communications), SelfConfiguringPlugin(pluginType)
 {
 	this->referenceName = "";
-	this->pluginType = std::string(pluginType);
 	this->params = std::vector<std::string>(params);
 }
 

@@ -9,9 +9,13 @@ class EvoprogSixWayValve(Control):
 		self.map = {}
 		self.lastPos = 0
 
-	def getParamsType(self):
+	@classmethod
+	def getParamsType(cls):
 		"""must return a list with the types expected at the params variable in the init function"""
-		return super(EvoprogSixWayValve, self) + ["int"]
+		dict = {}
+		dict["valve_number"] = "int"
+		dict.update(super(EvoprogSixWayValve, cls).getParamsType())
+		return dict
 
 	def getInstructions(self):
 		""" must return a string with the instructions to make this component"""

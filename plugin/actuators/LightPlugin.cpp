@@ -3,17 +3,15 @@
 using namespace boost::python;
 
 LightPlugin::LightPlugin() :
-	Light()
+    Light(), SelfConfiguringPlugin()
 {
-	this->pluginType = "";
 	this->referenceName = "";
 }
 
 LightPlugin::LightPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-	Light(communications)
+    Light(communications), SelfConfiguringPlugin(pluginType)
 {
 	this->referenceName = "";
-	this->pluginType = std::string(pluginType);
 	this->params = std::vector<std::string>(params);
 }
 

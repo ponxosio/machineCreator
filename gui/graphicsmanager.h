@@ -4,6 +4,7 @@
 //Qt
 #include <QObject>
 #include <QHash>
+#include <QGraphicsScene>
 
 // local
 #include "customcontaineritem.h"
@@ -11,6 +12,7 @@
 #include "fluidControl/executable/ExecutableMachineGraph.h"
 #include "fluidControl/executable/containers/ExecutableContainerNode.h"
 #include "graph/Edge.h"
+#include "util/Utils.h"
 
 /**
  * @brief The GraphicsManager class acts as an intermediate between the graphical Objects at the
@@ -26,8 +28,9 @@ public:
     void addContainer(std::shared_ptr<ExecutableContainerNode> container);
     void connectContainers(CustomContainerItem* container1, CustomContainerItem* container2);
 
-    void removeContainer(CustomContainerItem* container1);
-    void removeEdge(CustomEdgeGraphicsItem* edge);
+    void removeElement(QGraphicsItem* item);
+
+    void exportMachineGraph(const QString & path);
 signals:
 
 public slots:
@@ -38,6 +41,8 @@ private:
     QHash<CustomContainerItem*,std::shared_ptr<ExecutableContainerNode>> nodesMap;
     QHash<CustomEdgeGraphicsItem*,std::shared_ptr<Edge>> edgesMap;
 
+    void removeContainer(CustomContainerItem* container1);
+    void removeEdge(CustomEdgeGraphicsItem* edge);
 };
 
 #endif // GRAPHICSMANAGER_H

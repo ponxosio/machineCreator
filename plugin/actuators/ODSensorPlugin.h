@@ -8,6 +8,7 @@
 #include "..\..\fluidControl\executable\containers\actuators\extras\ODSensor.h"
 #include "..\..\fluidControl\executable\containers\actuators\communications\CommunicationsInterface.h"
 #include "..\PythonEnvironment.h"
+#include "selfconfiguringplugin.h"
 
 //cereal
 #include <cereal/cereal.hpp>
@@ -16,21 +17,20 @@
 #include <cereal/types/string.hpp>
 
 class ODSensorPlugin :
-	public ODSensor
+    public ODSensor, SelfConfiguringPlugin
 {
 public:
 	ODSensorPlugin();
 	ODSensorPlugin(int communications, const std::string & pluginType, const std::vector<std::string> & params);
 	virtual ~ODSensorPlugin();
 
-	virtual std::string getInstructions() throw (std::runtime_error);;
+    virtual std::string getInstructions() throw (std::runtime_error);
 	virtual double readOd() throw (std::runtime_error);
 
 	//SERIALIZATIoN
 	template<class Archive>
 	void serialize(Archive & ar, std::uint32_t const version);
 protected:
-	std::string pluginType;
 	std::vector<std::string> params;
 
 	std::string referenceName;
@@ -41,7 +41,7 @@ inline void ODSensorPlugin::serialize(Archive& ar,
 	const std::uint32_t version) {
 	if (version <= 1) {
 		ODSensor::serialize(ar, version);
-		ar(CEREAL_NVP(pluginType), CEREAL_NVP(params));
+        ar(CEREAL_NVP(params));
 	}
 }
 

@@ -60,8 +60,7 @@ int main(int argc, char *argv[])
     /***************************************
      * TEST
      * ************************************/
-   /* PythonEnvironment::GetInstance()->initEnvironment();
-    try {
+   /* try {
         std::unique_ptr<CommandSender> test = std::unique_ptr<CommandSender>(new FileSender("test.log", "inputFileData.txt"));
         std::unique_ptr<CommandSender> exec = std::unique_ptr<CommandSender>(new SerialSender());
 

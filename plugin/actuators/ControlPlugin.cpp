@@ -3,17 +3,15 @@
 using namespace boost::python;
 
 ControlPlugin::ControlPlugin() :
-	Control()
+    Control(), SelfConfiguringPlugin()
 {
-	this->pluginType = "";
 	this->referenceName = "";
 }
 
 ControlPlugin::ControlPlugin(int communications, int maxconnections, const std::string & pluginType, const std::vector<std::string>& params) :
-	Control(maxconnections, communications)
+    Control(maxconnections, communications), SelfConfiguringPlugin(pluginType)
 {
 	this->referenceName = "";
-	this->pluginType = std::string(pluginType);
 	this->params = std::vector<std::string>(params);
 	//this->params.insert(this->params.begin(), patch::to_string(maxconnections));
 }
@@ -107,7 +105,7 @@ std::string ControlPlugin::getInstructions() throw (std::runtime_error)
 {
 	try {
 		if (referenceName.empty()) {
-			referenceName = PythonEnvironment::GetInstance()->makeInstance(this->pluginType, this->params);
+            referenceName = PythonEnvironment::GetInstance()->makeInstance(pluginType, this->params);
 		}
 
 		const char* c_str = extract<const char*>(PythonEnvironment::GetInstance()->getVarInstance(referenceName).attr("getInstructions")());

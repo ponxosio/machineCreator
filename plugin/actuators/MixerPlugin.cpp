@@ -4,17 +4,15 @@ using namespace boost::python;
 
 
 MixerPlugin::MixerPlugin() :
-	Mixer()
+    Mixer(), SelfConfiguringPlugin()
 {
-	this->pluginType = "";
 	this->referenceName = "";
 }
 
 MixerPlugin::MixerPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-	Mixer(communications)
+    Mixer(communications),SelfConfiguringPlugin(pluginType)
 {
 	this->referenceName = "";
-	this->pluginType = std::string(pluginType);
 	this->params = std::vector<std::string>(params);
 }
 

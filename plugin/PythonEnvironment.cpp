@@ -207,3 +207,39 @@ std::string PythonEnvironment::getDirectoryPath(const std::string & path) throw 
         throw(std::invalid_argument("incorrect path, \\ or .py missing"));
     }
 }
+
+object PythonEnvironment::executeStaticMethod(const std::string & type, const std::string & method) {
+    try {
+        std::string path = PluginFileLoader::GetInstance()->getPath(type);
+        std::string dir = getDirectoryPath(path);
+        if (loadedFiles.find(dir) == loadedFiles.end()) {
+            LOG(DEBUG) << "adding path: " << dir;
+            addImportPath(dir);
+            loadedFiles.insert(dir);
+        }
+
+        object importObj;
+        std::string importName = getPythonClassNAme(path);
+        auto it = loadedClasses.find(importName);
+        if (it == loadedClasses.end()) {
+            LOG(DEBUG) << "importing file: " << importName;
+            importObj = import(str(importName));
+            loadedClasses.insert(std::make_pair(importName, importObj));
+        }
+        else {
+            importObj = it->second;
+        }
+
+        return importObj.attr(method.c_str())();
+    } catch (error_already_set) {
+        PyObject *ptype, *pvalue, *ptraceback;
+        PyErr_Fetch(&ptype, &pvalue, &ptraceback);
+        char * cs = PyString_AsString(pvalue);
+
+        std::string msg = "unknow";
+        if (cs) {
+            msg = std::string(cs);
+        }
+        throw(std::invalid_argument("error at python environment " + msg));
+    }
+}

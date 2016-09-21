@@ -6,9 +6,10 @@ class EvoprogDiscretePump(Extractor):
 		"""constructor"""
 		self.pinNumber = int(params[0]);
 
-	def getParamsType(self):
+	@classmethod
+	def getParamsType(cls):
 		"""must return a list with the types expected at the params variable in the init function"""
-		return ["int"]
+		return {"pin_number":"int"}
 
 	def getInstructions(self):
 		""" must return a string with the instructions to make this component"""

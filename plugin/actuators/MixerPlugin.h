@@ -8,6 +8,7 @@
 #include "..\..\fluidControl\executable\containers\actuators\extras\Mixer.h"
 #include "..\..\fluidControl\executable\containers\actuators\communications\CommunicationsInterface.h"
 #include "..\PythonEnvironment.h"
+#include "selfconfiguringplugin.h"
 
 //cereal
 #include <cereal/cereal.hpp>
@@ -17,7 +18,7 @@
 
 
 class MixerPlugin :
-	public Mixer
+    public Mixer, SelfConfiguringPlugin
 {
 public:
 	MixerPlugin();
@@ -32,7 +33,6 @@ public:
 	void serialize(Archive & ar, std::uint32_t const version);
 
 protected:
-	std::string pluginType;
 	std::vector<std::string> params;
 
 	std::string referenceName;
@@ -43,7 +43,7 @@ inline void MixerPlugin::serialize(Archive& ar,
 	const std::uint32_t version) {
 	if (version <= 1) {
 		Mixer::serialize(ar, version);
-		ar(CEREAL_NVP(pluginType), CEREAL_NVP(params));
+        ar(CEREAL_NVP(params));
 	}
 }
 

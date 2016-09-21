@@ -46,6 +46,8 @@ public:
 	std::string makeInstance(const std::string & type, const std::vector<std::string> & params) throw (std::invalid_argument);
 	void deleteInstance(const std::string & varName);
 	boost::python::api::object getVarInstance(const std::string & varName) throw (std::invalid_argument);
+
+    boost::python::object executeStaticMethod(const std::string & type, const std::string & method) throw (std::invalid_argument);
 	
 	void initEnvironment();
 	void finishEnvironment();

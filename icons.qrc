@@ -1,0 +1,33 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>ico/about.png</file>
+    <file>ico/add.png</file>
+    <file>ico/configuration.png</file>
+    <file>ico/connect.png</file>
+    <file>ico/edit.png</file>
+    <file>ico/export.png</file>
+    <file>ico/open.png</file>
+    <file>ico/remove.png</file>
+    <file>ico/zoom-in.png</file>
+    <file>ico/zoom-out.png</file>
+    <file>Img/continuous_bidirectionalswitch.png</file>
+    <file>Img/continuous_convergentswitchinlet.png</file>
+    <file>Img/continuous_divergentswitch.png</file>
+    <file>Img/continuous_divergentswitchsink.png</file>
+    <file>Img/continuous_flow.png</file>
+    <file>Img/continuous_inlet.png</file>
+    <file>Img/convergentswitch.png</file>
+    <file>Img/discrete_bidirectionalswitch.png</file>
+    <file>Img/discrete_convergentswitchinlet.png</file>
+    <file>Img/discrete_divergentswitch.png</file>
+    <file>Img/discrete_divergentswitchsink.png</file>
+    <file>Img/discrete_flow.png</file>
+    <file>Img/discrete_inlet.png</file>
+    <file>Img/light.png</file>
+    <file>Img/mixer.png</file>
+    <file>Img/odsensor.png</file>
+    <file>Img/sink.png</file>
+    <file>Img/temperature.png</file>
+    <file>Img/unknow.png</file>
+</qresource>
+</RCC>

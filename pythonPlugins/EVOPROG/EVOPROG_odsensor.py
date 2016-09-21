@@ -19,5 +19,6 @@ class EvoprogOdSensor(OdSensor):
 		value = ''.join(e for e in dataRead if e.isalnum())
 		return float(value)
 
-	def getParamsType(self):
-		return ["int"]
+	@classmethod
+	def getParamsType(cls):
+		return {"pinMumber":"int"}

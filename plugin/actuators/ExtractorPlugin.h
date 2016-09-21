@@ -8,7 +8,7 @@
 #include "..\..\fluidControl\executable\containers\actuators\liquids\Extractor.h"
 #include "..\..\fluidControl\executable\containers\actuators\communications\CommunicationsInterface.h"
 #include "..\PythonEnvironment.h"
-
+#include "selfconfiguringplugin.h"
 
 //cereal
 #include <cereal/cereal.hpp>
@@ -17,7 +17,7 @@
 #include <cereal/types/string.hpp>
 
 class ExtractorPlugin :
-	public Extractor
+    public Extractor, SelfConfiguringPlugin
 {
 public:
 	ExtractorPlugin();
@@ -35,7 +35,6 @@ public:
 	template<class Archive>
 	void serialize(Archive & ar, std::uint32_t const version);
 protected:
-	std::string pluginType;
 	std::vector<std::string> params;
 
 	std::string referenceName;
@@ -46,7 +45,7 @@ inline void ExtractorPlugin::serialize(Archive& ar,
 	const std::uint32_t version) {
 	if (version <= 1) {
 		Extractor::serialize(ar, version);
-		ar(CEREAL_NVP(pluginType), CEREAL_NVP(params));
+        ar(CEREAL_NVP(params));
 	}
 }
 

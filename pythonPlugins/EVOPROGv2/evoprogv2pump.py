@@ -8,9 +8,10 @@ class EvoprogV2Pump(Extractor):
 		self.dir = int(params[1]);
 		self.config = False;
 
-	def getParamsType(self):
+	@classmethod
+	def getParamsType(cls):
 		"""must return a list with the types expected at the params variable in the init function"""
-		return ["int", "int"]
+		return {"address":"int", "direction":"int"}
 
 	def getInstructions(self):
 		""" must return a string with the instructions to make this component"""

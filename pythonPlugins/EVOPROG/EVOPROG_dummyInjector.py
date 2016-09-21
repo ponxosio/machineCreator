@@ -5,9 +5,10 @@ class EvoprogDummyInjector(Injector):
 	def __init__(self, params):
 		"""constructor"""
 
-	def getParamsType(self):
+	@classmethod
+	def getParamsType(cls):
 		"""must return a list with the types expected at the params variable in the init function"""
-		return [""]
+		return {}
 
 	def getInstructions(self):
 		""" must return a string with the instructions to make this component"""
@@ -17,7 +18,7 @@ class EvoprogDummyInjector(Injector):
 		""" must return the movement type of this extractor:
 			or Extractor.continuous or Extractor.discrete or Extractor.irrelevant
 		"""
-		return Extractor.irrelevant
+		return Injector.irrelevant
 
 	def injectLiquid(self, rate, communications):
 		"""must send instructions via communications object to extract liquid from the container

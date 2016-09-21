@@ -3,17 +3,15 @@
 using namespace boost::python;
 
 TemperaturePlugin::TemperaturePlugin() :
-	Temperature()
+    Temperature(), SelfConfiguringPlugin()
 {
-	this->pluginType = "";
 	this->referenceName = "";
 }
 
 TemperaturePlugin::TemperaturePlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-	Temperature(communications)
+    Temperature(communications), SelfConfiguringPlugin(pluginType)
 {
-	this->referenceName = "";
-	this->pluginType = std::string(pluginType);
+    this->referenceName = "";
 	this->params = std::vector<std::string>(params);
 }
 

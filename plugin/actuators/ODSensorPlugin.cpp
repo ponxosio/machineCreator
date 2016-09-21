@@ -4,17 +4,15 @@ using namespace boost::python;
 
 
 ODSensorPlugin::ODSensorPlugin() :
-	ODSensor()
+    ODSensor(), SelfConfiguringPlugin()
 {
-	this->pluginType = "";
 	this->referenceName = "";
 }
 
 ODSensorPlugin::ODSensorPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-	ODSensor(communications)
+    ODSensor(communications), SelfConfiguringPlugin(pluginType)
 {
 	this->referenceName = "";
-	this->pluginType = std::string(pluginType);
 	this->params = std::vector<std::string>(params);
 }
 

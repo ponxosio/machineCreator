@@ -13,9 +13,13 @@ class Evoprog2WayValve(Control):
 		self.positions.append(2)
 		self.positions.append(4)
 
-	def getParamsType(self):
+	@classmethod
+	def getParamsType(cls):
 		"""must return a list with the types expected at the params variable in the init function"""
-		return super(Evoprog2WayValve, self) + ["int"]
+		dict = {}
+		dict["address"] = "int"
+		dict.update(super(Evoprog2WayValve, cls).getParamsType())
+		return dict
 
 	def getInstructions(self):
 		""" must return a string with the instructions to make this component"""

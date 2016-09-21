@@ -1,5 +1,13 @@
 import abc
 
+class abstractclassmethod(classmethod):
+
+	__isabstractmethod__ = True
+
+	def __init__(self, callable):
+		callable.__isabstractmethod__ = True
+		super(abstractclassmethod, self).__init__(callable)
+
 class Light(object):
 	__metaclass__  = abc.ABCMeta
 
@@ -7,9 +15,10 @@ class Light(object):
 	def __init__(self, params):
 		"""constructor"""
 
-	@abc.abstractmethod
-	def getParamsType(self):
+	@abstractclassmethod
+	def getParamsType(cls):
 		"""must return a list with the types expected at the params variable in the init function"""
+		return cls()
 
 	@abc.abstractmethod
 	def getInstructions(self):
