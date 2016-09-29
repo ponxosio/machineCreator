@@ -8,11 +8,10 @@ LightPlugin::LightPlugin() :
 	this->referenceName = "";
 }
 
-LightPlugin::LightPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-    Light(communications), SelfConfiguringPlugin(pluginType)
+LightPlugin::LightPlugin(int communications, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params) :
+    Light(communications), SelfConfiguringPlugin(pluginType, params)
 {
 	this->referenceName = "";
-	this->params = std::vector<std::string>(params);
 }
 
 

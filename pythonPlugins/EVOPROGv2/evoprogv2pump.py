@@ -4,8 +4,8 @@ from extractor import Extractor
 class EvoprogV2Pump(Extractor):
 	def __init__(self, params):
 		"""constructor"""
-		self.address = int(params[0]);
-		self.dir = int(params[1]);
+		self.address = int(params["address"]);
+		self.dir = int(params["direction"]);
 		self.config = False;
 
 	@classmethod

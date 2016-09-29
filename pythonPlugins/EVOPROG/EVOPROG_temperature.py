@@ -5,7 +5,7 @@ class EvoprogTemperature(Temperature):
 
 	def __init__(self, params):
 		"""constructor"""
-		self.pinNumber = int(params[0])
+		self.pinNumber = int(params["pinNumber"])
 
 	@classmethod
 	def getParamsType(cls):

@@ -4,7 +4,7 @@ from extractor import Extractor
 class EvoprogDiscretePump(Extractor):
 	def __init__(self, params):
 		"""constructor"""
-		self.pinNumber = int(params[0]);
+		self.pinNumber = int(params["pin_number"]);
 
 	@classmethod
 	def getParamsType(cls):

@@ -43,6 +43,16 @@ public:
 
 	virtual ~Node(){}
 
+    /**
+     * changes a containers id, do not use this method once a node
+     * is inserted in a graph.
+     * @brief setContainerId
+     * @param id
+     */
+    inline virtual void setContainerId(int id) {
+        containerID = id;
+    }
+
 	/**
 	 * Returns the ID of this node
 	 * @return Returns the ID of this node

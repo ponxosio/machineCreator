@@ -1,8 +1,9 @@
 #include "customcontaineritem.h"
 
-CustomContainerItem::CustomContainerItem(const QPixmap &pixmap, QGraphicsItem *parent) :
+CustomContainerItem::CustomContainerItem(const QString & name, const QPixmap &pixmap, QGraphicsItem *parent) :
     QGraphicsPixmapItem(pixmap, parent)
 {
+    setToolTip(name);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsScenePositionChanges);

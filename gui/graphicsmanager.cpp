@@ -9,10 +9,11 @@ GraphicsManager::~GraphicsManager() {
 
 }
 
-void GraphicsManager::addContainer(std::shared_ptr<ExecutableContainerNode> container) {
+void GraphicsManager::addContainer(const std::string &name, std::shared_ptr<ExecutableContainerNode> container) {
     std::string imgPath = Utils::getCurrentDir() + container->getType()->getTypeImagePath();
     LOG(DEBUG) << "loading picture : " << imgPath;
-    CustomContainerItem* item = new CustomContainerItem(QPixmap(QString::fromUtf8( imgPath.data(), imgPath.size())));
+    CustomContainerItem* item = new CustomContainerItem(QString::fromStdString(name), QPixmap(QString::fromUtf8( imgPath.data(), imgPath.size())));
+    container->setContainerId(serial.getNextValue());
     machine.addContainer(container);
     scene->addItem(item);
     nodesMap.insert(item, container);
@@ -59,8 +60,14 @@ void GraphicsManager::removeElement(QGraphicsItem* item) {
 }
 
 void GraphicsManager::exportMachineGraph(const QString & path) {
+    ExecutableMachineGraph::toJSON(path.toUtf8().constData(), machine);
+}
+
+void GraphicsManager::importMachine(ExecutableMachineGraph* machine) {
 
 }
+
+// protected
 
 void GraphicsManager::removeContainer(CustomContainerItem* container1) {
 

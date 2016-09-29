@@ -43,7 +43,7 @@ public:
 
 	virtual ~PythonEnvironment();
 
-	std::string makeInstance(const std::string & type, const std::vector<std::string> & params) throw (std::invalid_argument);
+    std::string makeInstance(const std::string & type, const std::unordered_map<std::string,std::string> & params) throw (std::invalid_argument);
 	void deleteInstance(const std::string & varName);
 	boost::python::api::object getVarInstance(const std::string & varName) throw (std::invalid_argument);
 

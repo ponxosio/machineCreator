@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     // Actually reconfigure all loggers instead
     el::Loggers::reconfigureAllLoggers(conf);
 
+    //PluginFileLoader::GetInstance()->toText();
 
     /***************************************
      * TEST

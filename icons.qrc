@@ -10,6 +10,7 @@
     <file>ico/remove.png</file>
     <file>ico/zoom-in.png</file>
     <file>ico/zoom-out.png</file>
+	<file>ico/find.png</file>
     <file>Img/continuous_bidirectionalswitch.png</file>
     <file>Img/continuous_convergentswitchinlet.png</file>
     <file>Img/continuous_divergentswitch.png</file>
@@ -29,5 +30,11 @@
     <file>Img/sink.png</file>
     <file>Img/temperature.png</file>
     <file>Img/unknow.png</file>
+	<file>Img/inlet.png</file>
+	<file>Img/flow.png</file>
+	<file>Img/divergentswitchsink.png</file>
+	<file>Img/divergentswitch.png</file>
+	<file>Img/convergentswitchinlet.png</file>
+	<file>Img/bidirectionalswitch.png</file>
 </qresource>
 </RCC>

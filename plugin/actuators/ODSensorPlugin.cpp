@@ -9,11 +9,10 @@ ODSensorPlugin::ODSensorPlugin() :
 	this->referenceName = "";
 }
 
-ODSensorPlugin::ODSensorPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-    ODSensor(communications), SelfConfiguringPlugin(pluginType)
+ODSensorPlugin::ODSensorPlugin(int communications, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params) :
+    ODSensor(communications), SelfConfiguringPlugin(pluginType, params)
 {
 	this->referenceName = "";
-	this->params = std::vector<std::string>(params);
 }
 
 

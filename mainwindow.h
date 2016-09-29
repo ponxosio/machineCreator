@@ -10,10 +10,15 @@
 #include <QPoint>
 #include <QPixmap>
 #include <QMessageBox>
+#include <QFileDialog>
 
 # include "gui/graphicsmanager.h"
+# include "gui/pluginmanagerdialog.h"
+# include "gui/pluginmanager.h"
+# include "gui/newcontainerdialog.h"
 # include "fluidControl/executable/containers/InletContainer.h"
 # include "fluidControl/executable/containers/SinkContainer.h"
+# include "fluidControl/executable/ExecutableMachineGraph.h"
 # include "plugin/actuators/ExtractorPlugin.h"
 # include "plugin/actuators/InjectorPlugin.h"
 # include "util/Utils.h"
@@ -45,7 +50,6 @@ private slots:
     void removeElements();
     void editContainer();
     void connectContainers();
-    void saveMachine();
     void openMachine();
     void managePlugins();
     void about();
@@ -60,6 +64,7 @@ private:
     CustomContainerItem* temp1Container;
     CustomContainerItem* temp2Container;
     GraphicsManager* manager;
+    PluginManager* pluginManager;
 
     void makeToolBar();
     void processConnectContainers();

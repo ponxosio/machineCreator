@@ -8,12 +8,10 @@ ControlPlugin::ControlPlugin() :
 	this->referenceName = "";
 }
 
-ControlPlugin::ControlPlugin(int communications, int maxconnections, const std::string & pluginType, const std::vector<std::string>& params) :
-    Control(maxconnections, communications), SelfConfiguringPlugin(pluginType)
+ControlPlugin::ControlPlugin(int communications, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params) :
+    Control(communications), SelfConfiguringPlugin(pluginType, params)
 {
 	this->referenceName = "";
-	this->params = std::vector<std::string>(params);
-	//this->params.insert(this->params.begin(), patch::to_string(maxconnections));
 }
 
 

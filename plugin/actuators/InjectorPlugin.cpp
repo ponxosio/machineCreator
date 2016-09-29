@@ -8,11 +8,10 @@ InjectorPlugin::InjectorPlugin() :
 	this->referenceName = "";
 }
 
-InjectorPlugin::InjectorPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-    Injector(communications), SelfConfiguringPlugin(pluginType)
+InjectorPlugin::InjectorPlugin(int communications, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params) :
+    Injector(communications), SelfConfiguringPlugin(pluginType, params)
 {
 	this->referenceName = "";
-	this->params = std::vector<std::string>(params);
 }
 
 

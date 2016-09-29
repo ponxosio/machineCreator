@@ -5,7 +5,7 @@ class EvoprogSixWayValve(Control):
 	def __init__(self, params):
 		"""constructor"""
 		super(EvoprogSixWayValve, self).__init__(params)
-		self.valveNumber = int(params[0])
+		self.valveNumber = int(params["valve_number"])
 		self.map = {}
 		self.lastPos = 0
 

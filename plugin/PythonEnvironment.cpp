@@ -57,7 +57,7 @@ void PythonEnvironment::addImportPath(const std::string & path)
 	PyList_Insert(sysPath, 0, PyString_FromString(path.c_str()));
 }
 
-std::string PythonEnvironment::makeInstance(const std::string & type, const std::vector<std::string>& params) throw (std::invalid_argument)
+std::string PythonEnvironment::makeInstance(const std::string & type, const std::unordered_map<std::string,std::string>& params) throw (std::invalid_argument)
 {
 	try {
 		std::string path = PluginFileLoader::GetInstance()->getPath(type);
@@ -80,10 +80,15 @@ std::string PythonEnvironment::makeInstance(const std::string & type, const std:
 			importObj = it->second;
 		}
 
+        boost::python::dict d;
+        for (auto it = params.begin(); it != params.end(); ++it) {
+            d[it->first] = it->second;
+        }
+
 		LOG(DEBUG) << "making new var name...";
 		std::string varName = "var" + patch::to_string(this->autoEnum.getNextValue());
 		LOG(DEBUG) << "creating new var on the environment...";
-		this->main_namespace[varName] = importObj.attr(str(type))(params);
+        this->main_namespace[varName] = importObj.attr(str(type))(d);
 		availableInstances.insert(varName);
 
 		return varName;
@@ -230,7 +235,8 @@ object PythonEnvironment::executeStaticMethod(const std::string & type, const st
             importObj = it->second;
         }
 
-        return importObj.attr(method.c_str())();
+        auto temp = importObj.attr(str(type));
+        return temp.attr(str(method))();
     } catch (error_already_set) {
         PyObject *ptype, *pvalue, *ptraceback;
         PyErr_Fetch(&ptype, &pvalue, &ptraceback);

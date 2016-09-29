@@ -5,14 +5,12 @@ using namespace boost::python;
 ExtractorPlugin::ExtractorPlugin() :
     Extractor(), SelfConfiguringPlugin()
 {
-	this->pluginType = "";
 	this->referenceName = "";
 }
 
-ExtractorPlugin::ExtractorPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-    Extractor(communications), SelfConfiguringPlugin(pluginType)
+ExtractorPlugin::ExtractorPlugin(int communications, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params) :
+    Extractor(communications), SelfConfiguringPlugin(pluginType, params)
 {
-	this->params = std::vector<std::string>(params);
 	this->referenceName = "";
 }
 

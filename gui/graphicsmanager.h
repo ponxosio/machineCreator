@@ -11,8 +11,10 @@
 #include "customedgegraphicsitem.h"
 #include "fluidControl/executable/ExecutableMachineGraph.h"
 #include "fluidControl/executable/containers/ExecutableContainerNode.h"
+#include "fluidControl/machineGraph/ContainerNodeType.h"
 #include "graph/Edge.h"
 #include "util/Utils.h"
+#include "util/AutoEnumerate.h"
 
 /**
  * @brief The GraphicsManager class acts as an intermediate between the graphical Objects at the
@@ -25,21 +27,23 @@ public:
     explicit GraphicsManager(QGraphicsScene* scene, QObject *parent = 0);
     virtual ~GraphicsManager();
 
-    void addContainer(std::shared_ptr<ExecutableContainerNode> container);
+    void addContainer(const std::string & name, std::shared_ptr<ExecutableContainerNode> container);
     void connectContainers(CustomContainerItem* container1, CustomContainerItem* container2);
 
     void removeElement(QGraphicsItem* item);
 
     void exportMachineGraph(const QString & path);
+    void importMachine(ExecutableMachineGraph* machine);
 signals:
 
 public slots:
 
-private:
+protected:
     QGraphicsScene* scene;
     ExecutableMachineGraph machine;
     QHash<CustomContainerItem*,std::shared_ptr<ExecutableContainerNode>> nodesMap;
     QHash<CustomEdgeGraphicsItem*,std::shared_ptr<Edge>> edgesMap;
+    AutoEnumerate serial;
 
     void removeContainer(CustomContainerItem* container1);
     void removeEdge(CustomEdgeGraphicsItem* edge);

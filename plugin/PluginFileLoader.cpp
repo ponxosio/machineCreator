@@ -80,10 +80,16 @@ void PluginFileLoader::checkFile(std::string path) {
 			getline(inFile, line);
 			if (Utils::starts_with(line, "class")) {
 				size_t posOpen = line.find("(");
-				string className = line.substr(5, posOpen - 5);
+                size_t posClose = line.find(")");
+
+                string className = line.substr(5, posOpen - 5);
 				boost::algorithm::trim(className);
+
+                string superClass = line.substr(posOpen + 1, (posClose - 1) - posOpen);
+                boost::algorithm::trim(superClass);
 				
 				this->namePathMap.insert(make_pair(className, path));
+                this->nameSuperclassMap.insert(make_pair(className, superClass));
 			}
 		}
 	}
@@ -99,8 +105,32 @@ std::string PluginFileLoader::getPath(std::string name) throw (std::invalid_argu
 	}
 }
 
+std::string PluginFileLoader::getSuperClass(std::string name) throw (std::invalid_argument) {
+    auto it = nameSuperclassMap.find(name);
+    if (it != nameSuperclassMap.end()) {
+        return it->second;
+    }
+    else {
+        throw(std::invalid_argument("key " + name + " does not exists"));
+    }
+}
+
+std::vector<std::string> PluginFileLoader::getAllNames() {
+    vector<string> keys;
+    keys.reserve(namePathMap.size());
+
+    for (auto kv: namePathMap) {
+        keys.push_back(kv.first);
+    }
+    return keys;
+}
+
 void PluginFileLoader::toText() {
 	for (auto it = namePathMap.begin(); it != namePathMap.end(); ++it) {
 		LOG(INFO) << "name: " << it->first << ", second: " << it->second;
 	}
+
+    for (auto it = nameSuperclassMap.begin(); it != nameSuperclassMap.end(); ++it) {
+        LOG(INFO) << "name: " << it->first << ", superClass: " << it->second;
+    }
 }

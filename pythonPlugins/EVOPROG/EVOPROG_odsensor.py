@@ -4,7 +4,7 @@ from odsensor import OdSensor
 class EvoprogOdSensor(OdSensor):
 
 	def __init__(self, params):
-		self.pinNumber = int(params[0])
+		self.pinNumber = int(params["pinNumber"])
 
 	def getInstructions(self):
 		return "";
@@ -21,4 +21,4 @@ class EvoprogOdSensor(OdSensor):
 
 	@classmethod
 	def getParamsType(cls):
-		return {"pinMumber":"int"}
+		return {"pinNumber":"int"}

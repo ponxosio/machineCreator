@@ -22,19 +22,21 @@ class MixerPlugin :
 {
 public:
 	MixerPlugin();
-	MixerPlugin(int communications, const std::string & pluginType, const std::vector<std::string> & params);
+    MixerPlugin(int communications, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params);
 	virtual ~MixerPlugin();
 
 	virtual std::string getInstructions()  throw(std::runtime_error);
 	virtual void mix(double intensity)  throw(std::runtime_error);
+
+    inline virtual SelfConfiguringPlugin* clone() {
+        return new MixerPlugin();
+    }
 
 	//SERIALIZATIoN
 	template<class Archive>
 	void serialize(Archive & ar, std::uint32_t const version);
 
 protected:
-	std::vector<std::string> params;
-
 	std::string referenceName;
 };
 
@@ -43,12 +45,12 @@ inline void MixerPlugin::serialize(Archive& ar,
 	const std::uint32_t version) {
 	if (version <= 1) {
 		Mixer::serialize(ar, version);
-        ar(CEREAL_NVP(params));
+        SelfConfiguringPlugin::serialize(ar, version);
 	}
 }
 
 // Associate some type with a version number
-CEREAL_CLASS_VERSION(MixerPlugin, (int)1);
+CEREAL_CLASS_VERSION(MixerPlugin, (int)2);
 
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior

@@ -8,11 +8,10 @@ TemperaturePlugin::TemperaturePlugin() :
 	this->referenceName = "";
 }
 
-TemperaturePlugin::TemperaturePlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-    Temperature(communications), SelfConfiguringPlugin(pluginType)
+TemperaturePlugin::TemperaturePlugin(int communications, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params) :
+    Temperature(communications), SelfConfiguringPlugin(pluginType, params)
 {
     this->referenceName = "";
-	this->params = std::vector<std::string>(params);
 }
 
 

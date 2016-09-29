@@ -21,19 +21,22 @@ class InjectorPlugin :
 {
 public:
 	InjectorPlugin();
-	InjectorPlugin(int communications, const std::string & pluginType, const std::vector<std::string> & params);
+    InjectorPlugin(int communications, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params);
 	virtual ~InjectorPlugin();
 
 	virtual void injectLiquid(double rate)throw (std::runtime_error);
 	virtual std::string getInstructions()throw (std::runtime_error);
 	virtual int getMovementType()throw (std::runtime_error);
 
+    inline virtual SelfConfiguringPlugin* clone() {
+        return new InjectorPlugin();
+    }
+
 	//SERIALIZATIoN
 	template<class Archive>
 	void serialize(Archive & ar, std::uint32_t const version);
-protected:
-	std::vector<std::string> params;
 
+protected:
 	std::string referenceName;
 };
 
@@ -42,12 +45,12 @@ inline void InjectorPlugin::serialize(Archive& ar,
 	const std::uint32_t version) {
 	if (version <= 1) {
 		Injector::serialize(ar, version);
-        ar(CEREAL_NVP(params));
+        SelfConfiguringPlugin::serialize(ar, version);
 	}
 }
 
 // Associate some type with a version number
-CEREAL_CLASS_VERSION(InjectorPlugin, (int)1);
+CEREAL_CLASS_VERSION(InjectorPlugin, (int)2);
 
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior

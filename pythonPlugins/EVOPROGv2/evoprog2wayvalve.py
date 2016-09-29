@@ -5,7 +5,7 @@ class Evoprog2WayValve(Control):
 	def __init__(self, params):
 		"""constructor"""
 		super(Evoprog2WayValve, self).__init__(2)
-		self.address = int(params[0])
+		self.address = int(params["address"])
 		self.map = {}
 		self.lastPos = 0
 		self.positions = []

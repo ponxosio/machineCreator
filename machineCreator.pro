@@ -49,8 +49,13 @@ SOURCES += main.cpp\
     gui/customcontaineritem.cpp \
     gui/customedgegraphicsitem.cpp \
     gui/graphicsmanager.cpp \
+    plugin/actuators/selfconfiguringplugin.cpp \
+    gui/pluginmanagerdialog.cpp \
     gui/pluginmanager.cpp \
-    plugin/actuators/selfconfiguringplugin.cpp
+    gui/newplugindialog.cpp \
+    gui/editplugindialog.cpp \
+    gui/newcontainerdialog.cpp \
+    gui/idemitingpushbutton.cpp
 
 HEADERS  += mainwindow.h \
     util/Patch.h \
@@ -163,8 +168,13 @@ HEADERS  += mainwindow.h \
     gui/customcontaineritem.h \
     gui/customedgegraphicsitem.h \
     gui/graphicsmanager.h \
+    plugin/actuators/selfconfiguringplugin.h \
+    gui/pluginmanagerdialog.h \
     gui/pluginmanager.h \
-    plugin/actuators/selfconfiguringplugin.h
+    gui/newplugindialog.h \
+    gui/editplugindialog.h \
+    gui/newcontainerdialog.h \
+    gui/idemitingpushbutton.h
 
 FORMS    += mainwindow.ui
 

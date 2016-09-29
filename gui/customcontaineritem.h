@@ -17,7 +17,7 @@
 class CustomContainerItem : public QGraphicsPixmapItem
 {
 public:
-    CustomContainerItem(const QPixmap &pixmap, QGraphicsItem *parent = Q_NULLPTR);
+    CustomContainerItem(const QString & name, const QPixmap &pixmap, QGraphicsItem *parent = Q_NULLPTR);
     virtual ~CustomContainerItem();
 
     void addArrivingEdge(CustomEdgeGraphicsItem* edge);

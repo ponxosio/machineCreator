@@ -43,10 +43,13 @@ public:
 	virtual ~PluginFileLoader();
 
 	std::string getPath(std::string name) throw (std::invalid_argument);
+    std::string getSuperClass(std::string name) throw (std::invalid_argument);
+    std::vector<std::string> getAllNames();
 
 	void toText();
 protected:
 	std::unordered_map<std::string, std::string> namePathMap;
+    std::unordered_map<std::string, std::string> nameSuperclassMap;
 
 	bool checkDirectory(string path, string mask);
     void checkFile(std::string path);

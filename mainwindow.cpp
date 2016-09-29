@@ -18,20 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QGraphicsScene* scene = new QGraphicsScene(this);
 
     manager = new GraphicsManager(scene);
-
-    vector<string> paramsce{ "7", "1" };
-    std::shared_ptr<Extractor> cExtractor13(
-                new ExtractorPlugin(communications, "EvoprogV2Pump", paramsce));
-
-    vector<string> paramsdi;
-    std::shared_ptr<Injector> dummyInjector(
-                new InjectorPlugin(communications, "EvoprogDummyInjector", paramsdi));
-
-    ExecutableMachineGraph::ExecutableContainerNodePtr cInlet1 = std::make_shared<InletContainer>(1, 100.0, cExtractor13);
-    ExecutableMachineGraph::ExecutableContainerNodePtr sink2 = std::make_shared<SinkContainer>(2, 100.0, dummyInjector);
-
-    manager->addContainer(cInlet1);
-    manager->addContainer(sink2);
+    pluginManager = new PluginManager();
 
     ui->graphicsView->setScene(scene);
     ui->statusBar->showMessage("Ready");
@@ -58,7 +45,9 @@ void MainWindow::itemSelected() {
 }
 
 void MainWindow:: addContainer() {
-
+    NewContainerDialog* dialog = new NewContainerDialog(manager, pluginManager,this);
+    dialog->exec();
+    delete dialog;
 }
 
 void MainWindow::removeElements(){
@@ -75,16 +64,20 @@ void MainWindow::connectContainers() {
     ui->statusBar->showMessage("select source container");
 }
 
-void MainWindow::saveMachine() {
-
-}
-
 void MainWindow::openMachine() {
-
+    QString path = QFileDialog::getOpenFileName(this, "select file to open", QString(), tr("JSON (*.json)"));
+    if (!path.isEmpty()) {
+        ExecutableMachineGraph* machine = ExecutableMachineGraph::fromJSON(path);
+        pluginManager->importMachine(machine);
+        manager->importMachine(machine);
+    }
 }
 
 void MainWindow::managePlugins() {
-
+    PluginManagerDialog manager(pluginManager,this, Qt::WindowTitleHint);
+    if (manager.exec() == QDialog::Accepted) {
+        LOG(INFO) << "accepted";
+    }
 }
 
 void MainWindow::about() {
@@ -92,11 +85,13 @@ void MainWindow::about() {
 }
 
 void MainWindow::zoomIn() {
-
+    ui->graphicsView->scale(1.2, 1.2);
+    ui->graphicsView->update();
 }
 
 void MainWindow::zoomOut() {
-
+    ui->graphicsView->scale(0.8, 0.8);
+    ui->graphicsView->update();
 }
 
 void MainWindow::editContainer() {
@@ -104,7 +99,11 @@ void MainWindow::editContainer() {
 }
 
 void MainWindow::exportMachine() {
-
+    QString fileName = QFileDialog::getSaveFileName(this, "save machine");
+    if (!fileName.isEmpty()) {
+        LOG(DEBUG) << "saving machine to " << fileName.toUtf8().constData();
+        manager->exportMachineGraph(fileName);
+    }
 }
 
 //Override

@@ -5,7 +5,7 @@ class EvoprogMixer(Mixer):
 
 	def __init__(self, params):
 		"""constructor"""
-		self.pinNumber = int(params[0])
+		self.pinNumber = int(params["pinNumber"])
 
 	@classmethod
 	def getParamsType(cls):
@@ -25,7 +25,7 @@ class EvoprogMixer(Mixer):
 				*) string readUntil(endCharacter) -- returns a string received from the machine, stops when the endCharacter arrives;
 				*) void synch() -- synchronize with the machine, not always necesary, only for protocols compatibles;
 		"""
-		command = "PWD " + str(self.pinNumber) + " " + "255" abs(intensity) > 255 else round(abs(intensity))
+		command = "PWD " + str(self.pinNumber) + " " + "255" if abs(intensity) > 255 else round(abs(intensity))
 		communications.sendString(command)
 		time.sleep(0.01)
 		communications.synch()

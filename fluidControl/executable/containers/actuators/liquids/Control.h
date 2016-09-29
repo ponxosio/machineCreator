@@ -20,11 +20,9 @@ class Control: public Instructable {
 public:
 	Control() {
 		this->communications = -1;
-		this->maxConexiones = 0;
 	}
-	Control(int maxConexiones, int communications) :
+    Control(int communications) :
 			Instructable() {
-		this->maxConexiones = maxConexiones;
 		this->communications = communications;
 	}
 	virtual ~Control(){}
@@ -43,19 +41,18 @@ public:
 	template<class Archive>
 	void serialize(Archive & ar, std::uint32_t const version);
 protected:
-	int maxConexiones;
 	int communications;
 };
 
 template<class Archive>
 inline void Control::serialize(Archive& ar, const std::uint32_t version) {
 	if (version <= 1) {
-		ar(CEREAL_NVP(maxConexiones), CEREAL_NVP(communications));
+        ar(CEREAL_NVP(communications));
 	}
 }
 
 // Associate some type with a version number
-CEREAL_CLASS_VERSION( Control, (int)1 );
+CEREAL_CLASS_VERSION( Control, (int)2 );
 
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior

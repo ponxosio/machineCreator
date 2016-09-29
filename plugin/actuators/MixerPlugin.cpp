@@ -9,11 +9,10 @@ MixerPlugin::MixerPlugin() :
 	this->referenceName = "";
 }
 
-MixerPlugin::MixerPlugin(int communications, const std::string & pluginType, const std::vector<std::string>& params) :
-    Mixer(communications),SelfConfiguringPlugin(pluginType)
+MixerPlugin::MixerPlugin(int communications, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params) :
+    Mixer(communications),SelfConfiguringPlugin(pluginType, params)
 {
 	this->referenceName = "";
-	this->params = std::vector<std::string>(params);
 }
 
 

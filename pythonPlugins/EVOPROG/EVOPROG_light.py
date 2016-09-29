@@ -4,8 +4,8 @@ from light import Light
 class EvoprogLight(Light):
 	def __init__(self, params):
 		"""constructor"""
-		self.wavelengthPin = int(param[0])
-		self.intensityPin = int(param[1])
+		self.wavelengthPin = int(param["wavelengthPin"])
+		self.intensityPin = int(param["intensityPin"])
 
 	
 	@classmethod
@@ -17,7 +17,6 @@ class EvoprogLight(Light):
 		""" must return a string with the instructions to make this component"""
 		return ""
 
-	@abc.abstractmethod
 	def applyLigth(self, wavelength, intensity, communications):
 		"""must send instructions to apply a ligth with the given real numbers wavelength and intensity, 
 		communication with the machine must be done via communications object
