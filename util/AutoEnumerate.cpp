@@ -25,6 +25,10 @@ void AutoEnumerate::reset() {
 	this->actualValue = 0;
 }
 
+void AutoEnumerate::reset(int initialValue) {
+    this->actualValue = initialValue;
+}
+
 void AutoEnumerate::nextNumber() {
 	this->actualValue ++;
 }

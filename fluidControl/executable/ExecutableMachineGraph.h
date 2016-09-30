@@ -81,6 +81,8 @@ public:
 	void printMachine(const std::string & path);
 
 	void updateControlActuators();
+
+    void clearMachine();
 	//
 
 	//mapping's operations

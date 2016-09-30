@@ -9,14 +9,27 @@ GraphicsManager::~GraphicsManager() {
 
 }
 
-void GraphicsManager::addContainer(const std::string &name, std::shared_ptr<ExecutableContainerNode> container) {
+CustomContainerItem* GraphicsManager::addContainer(const std::string &name, std::shared_ptr<ExecutableContainerNode> container) {
     std::string imgPath = Utils::getCurrentDir() + container->getType()->getTypeImagePath();
-    LOG(DEBUG) << "loading picture : " << imgPath;
     CustomContainerItem* item = new CustomContainerItem(QString::fromStdString(name), QPixmap(QString::fromUtf8( imgPath.data(), imgPath.size())));
+
     container->setContainerId(serial.getNextValue());
     machine.addContainer(container);
     scene->addItem(item);
     nodesMap.insert(item, container);
+
+    return item;
+}
+
+CustomContainerItem* GraphicsManager::addContainer(std::shared_ptr<ExecutableContainerNode> container) {
+    std::string imgPath = Utils::getCurrentDir() + container->getType()->getTypeImagePath();
+    CustomContainerItem* item = new CustomContainerItem(QString::number(container->getContainerId()), QPixmap(QString::fromUtf8( imgPath.data(), imgPath.size())));
+
+    machine.addContainer(container);
+    scene->addItem(item);
+    nodesMap.insert(item, container);
+
+    return item;
 }
 
 void GraphicsManager::connectContainers(CustomContainerItem* container1, CustomContainerItem* container2) {
@@ -56,7 +69,15 @@ void GraphicsManager::connectContainers(CustomContainerItem* container1, CustomC
 }
 
 void GraphicsManager::removeElement(QGraphicsItem* item) {
-
+    if (dynamic_cast<CustomContainerItem*>(item)) {
+        CustomContainerItem* cast = dynamic_cast<CustomContainerItem*>(item);
+        removeContainer(cast);
+    } else if (dynamic_cast<CustomEdgeGraphicsItem*>(item)) {
+        CustomEdgeGraphicsItem* cast = dynamic_cast<CustomEdgeGraphicsItem*>(item);
+        removeEdge(cast);
+    } else {
+        LOG(WARNING) << "error no know graphics type";
+    }
 }
 
 void GraphicsManager::exportMachineGraph(const QString & path) {
@@ -64,17 +85,61 @@ void GraphicsManager::exportMachineGraph(const QString & path) {
 }
 
 void GraphicsManager::importMachine(ExecutableMachineGraph* machine) {
+    int maxId = 0;
+    QHash<int, CustomContainerItem*> nodeMaps;
 
+    clearScene();
+    ExecutableMachineGraph::ExecutableContainerNodeVectorPtr nodes = machine->getGraph()->getAllNodes();
+    for (ExecutableMachineGraph::ExecutableContainerNodePtr actualNode: *(nodes.get())) {
+        CustomContainerItem* graphItem = addContainer(actualNode);
+        nodeMaps.insert(actualNode->getContainerId(), graphItem);
+        maxId = qMax(maxId, actualNode->getContainerId());
+    }
+    serial.reset(maxId + 1);
+
+    ExecutableMachineGraph::ExecutableContainerEdgeVectorPtr edges = machine->getGraph()->getEdgeList();
+    for (ExecutableMachineGraph::ExecutableContainerEdgePtr actualEdge: *(edges.get())) {
+        CustomContainerItem* iSource = nodeMaps[actualEdge->getIdSource()];
+        CustomContainerItem* iTarget = nodeMaps[actualEdge->getIdTarget()];
+        connectContainers(iSource, iTarget);
+    }
+}
+
+void GraphicsManager::clearScene() {
+    scene->clear();
+    machine.clearMachine();
+    nodesMap.clear();
+    edgesMap.clear();
+    serial.reset();
 }
 
 // protected
-
 void GraphicsManager::removeContainer(CustomContainerItem* container1) {
+    std::shared_ptr<ExecutableContainerNode> nodeGraph = nodesMap[container1];
+    machine.getGraph()->removeNode(nodeGraph->getContainerId());
 
+    QList<CustomEdgeGraphicsItem*> arrivingEdges = container1->getArrivingEdges();
+    for (CustomEdgeGraphicsItem* arriving: arrivingEdges) {
+        removeEdge(arriving);
+    }
+    QList<CustomEdgeGraphicsItem*> leavingEdges = container1->getLeavingEdges();
+    for (CustomEdgeGraphicsItem* leaving: leavingEdges) {
+        removeEdge(leaving);
+    }
+
+    scene->removeItem(container1);
+    nodesMap.remove(container1);
 }
 
 void GraphicsManager::removeEdge(CustomEdgeGraphicsItem* edge) {
+    std::shared_ptr<Edge> edgeGraph = edgesMap[edge];
+    machine.getGraph()->removeEdge(*edgeGraph.get());
 
+    for (CustomContainerItem* actualNode: nodesMap.keys()) {
+        actualNode->removeEdge(edge);
+    }
+    scene->removeItem(edge);
+    edgesMap.remove(edge);
 }
 
 

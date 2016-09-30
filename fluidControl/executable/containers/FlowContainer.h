@@ -47,6 +47,15 @@ public:
 
 	virtual void updateCommunicationInterface(int communication);
 
+    //getters & setters
+    inline std::shared_ptr<Extractor> getExtractor() {
+        return extract;
+    }
+
+    inline std::shared_ptr<Injector> getInjector() {
+        return insert;
+    }
+
 	//SERIALIZATIoN
 	template<class Archive>
 	void serialize(Archive & ar, std::uint32_t const version);

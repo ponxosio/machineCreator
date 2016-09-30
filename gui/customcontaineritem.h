@@ -28,6 +28,13 @@ public:
     // override
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
+    //inline
+    inline QList<CustomEdgeGraphicsItem*> getLeavingEdges() const {
+        return leavingEdges;
+    }
+    inline QList<CustomEdgeGraphicsItem*> getArrivingEdges() const {
+        return arrivingEdges;
+    }
 private:
     QList<CustomEdgeGraphicsItem*> leavingEdges;
     QList<CustomEdgeGraphicsItem*> arrivingEdges;

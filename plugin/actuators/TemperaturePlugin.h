@@ -18,7 +18,7 @@
 
 
 class TemperaturePlugin :
-    public Temperature, SelfConfiguringPlugin
+    public Temperature, public SelfConfiguringPlugin
 {
 public:
 	TemperaturePlugin();
@@ -50,7 +50,7 @@ inline void TemperaturePlugin::serialize(Archive& ar,
 }
 
 // Associate some type with a version number
-CEREAL_CLASS_VERSION(TemperaturePlugin, (int)2);
+CEREAL_CLASS_VERSION(TemperaturePlugin, (int)1);
 
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior

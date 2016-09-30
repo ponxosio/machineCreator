@@ -167,6 +167,7 @@ void NewContainerDialog::createLayout(const QString & type) {
     ctrl1Types << CONVERGENT_SWITCH_NAME << DIVERGENT_SWITCH_NAME << CONV_SWITCH_INLET_NAME << DIVERGENT_SWITCH_SINK_NAME << BIDIRECTIONAL_SWITCH_NAME;
 
     buttonIdLineEditMap.clear();
+    pluginLineEditMap.clear();
     if (outTypes.contains(type)) {
         createPluginInput(serial.getNextValue(), EXTRACTOR_NAME);
     }

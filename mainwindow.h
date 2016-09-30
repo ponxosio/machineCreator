@@ -25,7 +25,8 @@
 
 typedef enum AplicationStatus_ {
     normal,
-    connect_operation
+    connect_operation,
+    remove_operation
 } AplicationStatus;
 
 namespace Ui {

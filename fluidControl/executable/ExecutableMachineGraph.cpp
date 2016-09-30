@@ -322,6 +322,12 @@ void ExecutableMachineGraph::substractVolume(int idContainer, float volume) {
 	}
 }
 
+void ExecutableMachineGraph::clearMachine() {
+    graph->clear();
+    usedNodes->clear();
+    usedEges->clear();
+}
+
 CommandSender* ExecutableMachineGraph::getTestCommunicationsPrototypeCopy() {
 	return testComInterface->clone();
 }

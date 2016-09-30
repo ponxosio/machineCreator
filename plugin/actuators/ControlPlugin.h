@@ -17,7 +17,7 @@
 #include <cereal/types/string.hpp>
 
 class ControlPlugin :
-    public Control, SelfConfiguringPlugin
+    public Control, public SelfConfiguringPlugin
 {
 public:
 	ControlPlugin();
@@ -55,7 +55,7 @@ inline void ControlPlugin::serialize(Archive& ar,
 }
 
 // Associate some type with a version number
-CEREAL_CLASS_VERSION(ControlPlugin, (int)2);
+CEREAL_CLASS_VERSION(ControlPlugin, (int)1);
 
 // Include any archives you plan on using with your type before you register it
 // Note that this could be done in any other location so long as it was prior

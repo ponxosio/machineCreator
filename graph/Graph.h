@@ -314,7 +314,7 @@ bool Graph<NodeType,EdgeType>::removeNode(int nodeID) {
 			EdgeTypePtr actual = *it;
 			if ((actual->getIdSource() == nodeID)
 					|| (actual->getIdTarget() == nodeID)) {
-				edgeList->erase(it);
+                it = edgeList->erase(it);
 				//delete actual;
 			} else {
 				++it;
@@ -340,7 +340,7 @@ void Graph<NodeType, EdgeType>::removeEdge(const EdgeType & edge) {
 	while (it != edgeList->end()) {
 		EdgeTypePtr actual = *it;
 		if (actual->equals(edge)) {
-			edgeList->erase(it);
+            it = edgeList->erase(it);
 			//delete actual;
 		} else {
 			++it;

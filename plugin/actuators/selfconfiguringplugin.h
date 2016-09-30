@@ -18,6 +18,7 @@
 #include <cereal/cereal.hpp>
 #include <cereal/types/polymorphic.hpp>
 #include <cereal/types/string.hpp>
+#include <cereal/types/unordered_map.hpp>
 
 class SelfConfiguringPlugin
 {
@@ -49,8 +50,8 @@ template<class Archive>
 inline void SelfConfiguringPlugin::serialize(Archive& ar,
     const std::uint32_t version) {
     if (version <= 1) {
-        SelfConfiguringPlugin::serialize(ar, version);
-        ar(CEREAL_NVP(pluginType));
+        //SelfConfiguringPlugin::serialize(ar, version);
+        ar(CEREAL_NVP(pluginType), CEREAL_NVP(params));
     }
 }
 

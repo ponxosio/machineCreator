@@ -27,13 +27,16 @@ public:
     explicit GraphicsManager(QGraphicsScene* scene, QObject *parent = 0);
     virtual ~GraphicsManager();
 
-    void addContainer(const std::string & name, std::shared_ptr<ExecutableContainerNode> container);
+    CustomContainerItem* addContainer(const std::string & name, std::shared_ptr<ExecutableContainerNode> container);
+    CustomContainerItem* addContainer(std::shared_ptr<ExecutableContainerNode> container);
     void connectContainers(CustomContainerItem* container1, CustomContainerItem* container2);
 
     void removeElement(QGraphicsItem* item);
 
     void exportMachineGraph(const QString & path);
     void importMachine(ExecutableMachineGraph* machine);
+
+    void clearScene();
 signals:
 
 public slots:

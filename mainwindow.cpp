@@ -51,7 +51,16 @@ void MainWindow:: addContainer() {
 }
 
 void MainWindow::removeElements(){
-
+    QList<QGraphicsItem*> selected = ui->graphicsView->scene()->selectedItems();
+    if (!selected.empty()) {
+        if (QMessageBox::warning(this, "remove these elements ?", "do you really want to remove this elements?",QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Ok) {
+            for (QGraphicsItem* actual: selected) {
+                manager->removeElement(actual);
+            }
+        }
+    } else {
+        ui->statusBar->showMessage("please select some elements to remove");
+    }
 }
 
 void MainWindow::connectContainers() {
@@ -67,9 +76,9 @@ void MainWindow::connectContainers() {
 void MainWindow::openMachine() {
     QString path = QFileDialog::getOpenFileName(this, "select file to open", QString(), tr("JSON (*.json)"));
     if (!path.isEmpty()) {
-        ExecutableMachineGraph* machine = ExecutableMachineGraph::fromJSON(path);
-        pluginManager->importMachine(machine);
+        ExecutableMachineGraph* machine = ExecutableMachineGraph::fromJSON(path.toUtf8().constData());
         manager->importMachine(machine);
+        pluginManager->importMachine(machine);
     }
 }
 
@@ -131,12 +140,12 @@ void MainWindow::exportMachine() {
      QPixmap configpix( "ico/configuration.png");
      QPixmap zoomInpix( "ico/zoom-in.png");
      QPixmap zoomOutpix( "ico/zoom-out.png");
-     QPixmap editpix( "ico/edit.png");
+     //QPixmap editpix( "ico/edit.png");
      QPixmap aboutpix("ico/about.png");
 
      QAction *add = ui->mainToolBar->addAction(QIcon(addpix), "Add container");
      QAction *remove = ui->mainToolBar->addAction(QIcon(removepix), "Remove element");
-     QAction *edit = ui->mainToolBar->addAction(QIcon(editpix), "Edit container");
+     //QAction *edit = ui->mainToolBar->addAction(QIcon(editpix), "Edit container");
      QAction *connect = ui->mainToolBar->addAction(QIcon(connectpix), "Connect containers");
      QAction *exportAction = ui->mainToolBar->addAction(QIcon(exportpix), "Export Machine");
      QAction *open = ui->mainToolBar->addAction(QIcon(openpix), "Open file");
@@ -154,7 +163,7 @@ void MainWindow::exportMachine() {
      QObject::connect(config, &QAction::triggered, this, &MainWindow::managePlugins);
      QObject::connect(zoomIn, &QAction::triggered, this, &MainWindow::zoomIn);
      QObject::connect(zoomOut, &QAction::triggered, this, &MainWindow::zoomOut);
-     QObject::connect(edit, &QAction::triggered, this, &MainWindow::editContainer);
+    // QObject::connect(edit, &QAction::triggered, this, &MainWindow::editContainer);
      QObject::connect(about, &QAction::triggered, this, &MainWindow::about);
  }
 

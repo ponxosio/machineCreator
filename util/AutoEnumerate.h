@@ -34,6 +34,7 @@ public:
 	 * Reset the sequence to the start.
 	 */
 	void reset();
+    void reset(int initialValue);
 protected:
 	int actualValue;
 };
