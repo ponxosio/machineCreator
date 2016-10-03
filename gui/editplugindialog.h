@@ -13,7 +13,7 @@
 
 
 //local
-#include "plugin/actuators/selfconfiguringplugin.h"
+#include <plugin/actuators/selfconfiguringplugin.h>
 
 class EditPluginDialog : public QDialog
 {
