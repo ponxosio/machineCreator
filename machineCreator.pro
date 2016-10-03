@@ -42,6 +42,7 @@ INCLUDEPATH += C:/Python27/include
 
 LIBS += -L$$quote(X:\boost_1_61_0\stage\lib) -lboost_python-vc140-mt-1_61
 LIBS += -L$$quote(C:\Python27\libs)
+LIBS += -L$$quote(X:\machineCreator\lib) -lEvoCoderCore
 
 QMAKE_CXXFLAGS += -bigobj
 
