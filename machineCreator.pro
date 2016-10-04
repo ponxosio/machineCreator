@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     gui/newplugindialog.cpp \
     gui/editplugindialog.cpp \
     gui/newcontainerdialog.cpp \
-    gui/idemitingpushbutton.cpp
+    gui/idemitingpushbutton.cpp \
+    gui/cretefilesenderdialog.cpp \
+    gui/createserialsenderdialog.cpp
 HEADERS  += mainwindow.h \
     gui/customcontaineritem.h \
     gui/customedgegraphicsitem.h \
@@ -32,7 +34,9 @@ HEADERS  += mainwindow.h \
     gui/newplugindialog.h \
     gui/editplugindialog.h \
     gui/newcontainerdialog.h \
-    gui/idemitingpushbutton.h
+    gui/idemitingpushbutton.h \
+    gui/cretefilesenderdialog.h \
+    gui/createserialsenderdialog.h
 
 FORMS    += mainwindow.ui
 

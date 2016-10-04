@@ -142,4 +142,12 @@ void GraphicsManager::removeEdge(CustomEdgeGraphicsItem* edge) {
     edgesMap.remove(edge);
 }
 
+void GraphicsManager::setTestPrototype(std::unique_ptr<CommandSender> testPrototype) {
+    machine.setTestCommunicationsPrototype(std::move(testPrototype));
+}
+
+void GraphicsManager::setExecPrototype(std::unique_ptr<CommandSender> execPrototype) {
+    machine.setExecCommunicationsPrototype(std::move(execPrototype));
+}
+
 

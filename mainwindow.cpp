@@ -34,6 +34,16 @@ MainWindow::~MainWindow()
 
 // SLOTS
 
+void MainWindow::setTestCommunication() {
+    CreteFileSenderDialog dialog(manager, this);
+    dialog.exec();
+}
+
+void MainWindow::setExecCommunication() {
+    CreateSerialSenderDialog dialog(manager, this);
+    dialog.exec();
+}
+
 void MainWindow::itemSelected() {
     switch (status) {
     case AplicationStatus::connect_operation:
@@ -142,6 +152,8 @@ void MainWindow::exportMachine() {
      QPixmap zoomOutpix( "ico/zoom-out.png");
      //QPixmap editpix( "ico/edit.png");
      QPixmap aboutpix("ico/about.png");
+     QPixmap testCompix("ico/testCom.png");
+     QPixmap execCompix("ico/execCom.png");
 
      QAction *add = ui->mainToolBar->addAction(QIcon(addpix), "Add container");
      QAction *remove = ui->mainToolBar->addAction(QIcon(removepix), "Remove element");
@@ -150,10 +162,11 @@ void MainWindow::exportMachine() {
      QAction *exportAction = ui->mainToolBar->addAction(QIcon(exportpix), "Export Machine");
      QAction *open = ui->mainToolBar->addAction(QIcon(openpix), "Open file");
      QAction *config = ui->mainToolBar->addAction(QIcon(configpix), "Plugin Manager");
+     QAction *setTestCom = ui->mainToolBar->addAction(QIcon(testCompix), "set test communication interface");
+     QAction *setExecCom = ui->mainToolBar->addAction(QIcon(execCompix), "set execution communication interface");
      QAction *zoomIn = ui->mainToolBar->addAction(QIcon(zoomInpix), "Zoom in");
      QAction *zoomOut = ui->mainToolBar->addAction(QIcon(zoomOutpix), "Zoom out");
      QAction *about = ui->mainToolBar->addAction(QIcon(aboutpix), "about");
-
 
      QObject::connect(add, &QAction::triggered, this, &MainWindow::addContainer);
      QObject::connect(remove, &QAction::triggered, this, &MainWindow::removeElements);
@@ -165,6 +178,8 @@ void MainWindow::exportMachine() {
      QObject::connect(zoomOut, &QAction::triggered, this, &MainWindow::zoomOut);
     // QObject::connect(edit, &QAction::triggered, this, &MainWindow::editContainer);
      QObject::connect(about, &QAction::triggered, this, &MainWindow::about);
+     QObject::connect(setExecCom, &QAction::triggered, this, &MainWindow::setExecCommunication);
+     QObject::connect(setTestCom, &QAction::triggered, this, &MainWindow::setTestCommunication);
  }
 
  void MainWindow::processConnectContainers() {

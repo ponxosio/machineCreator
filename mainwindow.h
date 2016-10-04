@@ -16,6 +16,8 @@
 # include "gui/pluginmanagerdialog.h"
 # include "gui/pluginmanager.h"
 # include "gui/newcontainerdialog.h"
+# include "gui/createserialsenderdialog.h"
+# include "gui/cretefilesenderdialog.h"
 # include "fluidControl/executable/containers/InletContainer.h"
 # include "fluidControl/executable/containers/SinkContainer.h"
 # include "fluidControl/executable/ExecutableMachineGraph.h"
@@ -58,6 +60,8 @@ private slots:
     void zoomOut();
     void itemSelected();
     void exportMachine();
+    void setTestCommunication();
+    void setExecCommunication();
 
 private:
     Ui::MainWindow *ui;

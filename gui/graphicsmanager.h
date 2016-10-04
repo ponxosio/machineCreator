@@ -11,10 +11,12 @@
 #include "customedgegraphicsitem.h"
 #include "fluidControl/executable/ExecutableMachineGraph.h"
 #include "fluidControl/executable/containers/ExecutableContainerNode.h"
+#include "fluidControl/executable/containers/actuators/communications/CommandSender.h"
 #include "fluidControl/machineGraph/ContainerNodeType.h"
 #include "graph/Edge.h"
 #include "util/Utils.h"
 #include "util/AutoEnumerate.h"
+
 
 /**
  * @brief The GraphicsManager class acts as an intermediate between the graphical Objects at the
@@ -37,6 +39,9 @@ public:
     void importMachine(ExecutableMachineGraph* machine);
 
     void clearScene();
+
+    void setTestPrototype(std::unique_ptr<CommandSender> testPrototype);
+    void setExecPrototype(std::unique_ptr<CommandSender> execPrototype);
 signals:
 
 public slots:
