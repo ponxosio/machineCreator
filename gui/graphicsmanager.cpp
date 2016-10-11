@@ -11,7 +11,15 @@ GraphicsManager::~GraphicsManager() {
 
 CustomContainerItem* GraphicsManager::addContainer(const std::string &name, std::shared_ptr<ExecutableContainerNode> container) {
     std::string imgPath = Utils::getCurrentDir() + container->getType()->getTypeImagePath();
-    CustomContainerItem* item = new CustomContainerItem(QString::fromStdString(name), QPixmap(QString::fromUtf8( imgPath.data(), imgPath.size())));
+    bool addons[ADDONS_MAX];
+    for (int i = 0; i < ADDONS_MAX; i++) {
+        if (container->getType()->hasAddOns((AddOnsType)i)) {
+            addons[i] = true;
+        } else {
+            addons[i] = false;
+        }
+    }
+    CustomContainerItem* item = new CustomContainerItem(QString::fromStdString(name), QPixmap(QString::fromUtf8( imgPath.data(), imgPath.size())), addons);
 
     container->setContainerId(serial.getNextValue());
     machine.addContainer(container);
@@ -23,7 +31,16 @@ CustomContainerItem* GraphicsManager::addContainer(const std::string &name, std:
 
 CustomContainerItem* GraphicsManager::addContainer(std::shared_ptr<ExecutableContainerNode> container) {
     std::string imgPath = Utils::getCurrentDir() + container->getType()->getTypeImagePath();
-    CustomContainerItem* item = new CustomContainerItem(QString::number(container->getContainerId()), QPixmap(QString::fromUtf8( imgPath.data(), imgPath.size())));
+
+    bool addons[ADDONS_MAX];
+    for (int i = 0; i < ADDONS_MAX; i++) {
+        if (container->getType()->hasAddOns((AddOnsType)i)) {
+            addons[i] = true;
+        } else {
+            addons[i] = false;
+        }
+    }
+    CustomContainerItem* item = new CustomContainerItem(QString::number(container->getContainerId()), QPixmap(QString::fromUtf8( imgPath.data(), imgPath.size())), addons);
 
     machine.addContainer(container);
     scene->addItem(item);

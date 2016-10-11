@@ -321,115 +321,116 @@ void NewContainerDialog::setBidirectionalSwitchDescription() {
 
  ExecutableContainerNode* NewContainerDialog::createInlet(float capacity) {
      ExecutableContainerNode* container = NULL;
-     ExtractorPlugin* extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
+     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
      if (extr) {
-         container = new InletContainer(-1, capacity, std::shared_ptr<Extractor>(extr));
+         container = new InletContainer(-1, capacity, extr);
      }
      return container;
  }
 
  ExecutableContainerNode* NewContainerDialog::createSink(float capacity) {
      ExecutableContainerNode* container = NULL;
-     InjectorPlugin* inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
+     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
      if (inj) {
-        container = new SinkContainer(-1, capacity, std::shared_ptr<Injector>(inj));
+        container = new SinkContainer(-1, capacity, inj);
      }
      return container;
  }
 
  ExecutableContainerNode* NewContainerDialog::createFlow(float capacity) {
      ExecutableContainerNode* container = NULL;
-     ExtractorPlugin* extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     InjectorPlugin* inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
+     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
+     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
      if (inj && extr) {
-        container = new FlowContainer(-1, capacity,std::shared_ptr<Extractor>(extr), std::shared_ptr<Injector>(inj));
+        container = new FlowContainer(-1, capacity, extr, inj);
      }
      return container;
  }
 
  ExecutableContainerNode* NewContainerDialog::createDivergentSwitch(float capacity) {
      ExecutableContainerNode* container = NULL;
-     ExtractorPlugin* extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     ControlPlugin* ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
+     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
      if (extr && ctr) {
-        container = new DivergentSwitch(-1, capacity, std::shared_ptr<Extractor>(extr), std::shared_ptr<Control>(ctr));
+        container = new DivergentSwitch(-1, capacity, extr, ctr);
      }
      return container;
  }
 
  ExecutableContainerNode* NewContainerDialog::createConvergentSwitch(float capacity) {
      ExecutableContainerNode* container = NULL;
-     InjectorPlugin* inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
-     ControlPlugin* ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
+     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
      if (inj && ctr) {
-        container = new ConvergentSwitch(-1, capacity, std::shared_ptr<Injector>(inj), std::shared_ptr<Control>(ctr));
+        container = new ConvergentSwitch(-1, capacity, inj, ctr);
      }
      return container;
  }
 
  ExecutableContainerNode* NewContainerDialog::createDivergentSwitchSink(float capacity) {
      ExecutableContainerNode* container = NULL;
-     ExtractorPlugin* extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     InjectorPlugin* inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
-     ControlPlugin* ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
+     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
+     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
      if (extr && ctr && inj) {
-        container = new DivergentSwitchSink(-1, capacity,std::shared_ptr<Injector>(inj), std::shared_ptr<Extractor>(extr), std::shared_ptr<Control>(ctr));
+        container = new DivergentSwitchSink(-1, capacity, inj, extr, ctr);
      }
      return container;
  }
 
  ExecutableContainerNode* NewContainerDialog::createConvergentSwitchInlet(float capacity) {
      ExecutableContainerNode* container = NULL;
-     ExtractorPlugin* extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     InjectorPlugin* inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
-     ControlPlugin* ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
+     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
+     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+
      if (extr && ctr && inj) {
-        container = new ConvergentSwitchInlet(-1, capacity,std::shared_ptr<Injector>(inj), std::shared_ptr<Extractor>(extr), std::shared_ptr<Control>(ctr));
+        container = new ConvergentSwitchInlet(-1, capacity, inj, extr, ctr);
      }
      return container;
  }
 
  ExecutableContainerNode* NewContainerDialog::createBidirectionalSwitch(float capacity) {
      ExecutableContainerNode* container = NULL;
-     ExtractorPlugin* extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     InjectorPlugin* inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
-     ControlPlugin* ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
-     ControlPlugin* ctr2 = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
+     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
+     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<ControlPlugin> ctr2 = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
      if (extr && ctr && ctr2 && inj) {
-        container = new BidirectionalSwitch(-1, capacity,std::shared_ptr<Extractor>(extr), std::shared_ptr<Injector>(inj), std::shared_ptr<Control>(ctr), std::shared_ptr<Control>(ctr2));
+        container = new BidirectionalSwitch(-1, capacity, extr, inj, ctr, ctr2);
      }
      return container;
  }
 
  void NewContainerDialog::setAddons(ExecutableContainerNode* node) {
      if (!mixerEdit->text().isEmpty()) {
-         MixerPlugin* mixerAddon = static_cast<MixerPlugin*>(pluginManager->getPlugin(mixerEdit->text().toUtf8().constData()));
+         std::shared_ptr<MixerPlugin> mixerAddon = std::static_pointer_cast<MixerPlugin>(pluginManager->getPlugin(mixerEdit->text().toUtf8().constData()));
          if (mixerAddon) {
-            node->setMix(std::shared_ptr<Mixer>(mixerAddon));
+            node->setMix(mixerAddon);
          } else {
              LOG(ERROR) << "wrong cast to " << mixerEdit->text().toUtf8().constData();
          }
      }
      if (!lightEdit->text().isEmpty()) {
-         LightPlugin* lightAddon = static_cast<LightPlugin*>(pluginManager->getPlugin(lightEdit->text().toUtf8().constData()));
+         std::shared_ptr<LightPlugin> lightAddon = std::static_pointer_cast<LightPlugin>(pluginManager->getPlugin(lightEdit->text().toUtf8().constData()));
          if (lightAddon) {
-            node->setLight(std::shared_ptr<Light>(lightAddon));
+            node->setLight(lightAddon);
          } else {
              LOG(ERROR) << "wrong cast to " << lightEdit->text().toUtf8().constData();
          }
      }
      if (!temperatureEdit->text().isEmpty()) {
-         TemperaturePlugin* tempAddon = static_cast<TemperaturePlugin*>(pluginManager->getPlugin(temperatureEdit->text().toUtf8().constData()));
+         std::shared_ptr<TemperaturePlugin> tempAddon = std::static_pointer_cast<TemperaturePlugin>(pluginManager->getPlugin(temperatureEdit->text().toUtf8().constData()));
          if (tempAddon) {
-            node->setTemperature(std::shared_ptr<Temperature>(tempAddon));
+            node->setTemperature(tempAddon);
          } else {
              LOG(ERROR) << "wrong cast to " << temperatureEdit->text().toUtf8().constData();
          }
      }
      if (!odSensorEdit->text().isEmpty()) {
-         ODSensorPlugin* odAddon = static_cast<ODSensorPlugin*>(pluginManager->getPlugin(odSensorEdit->text().toUtf8().constData()));
+         std::shared_ptr<ODSensorPlugin> odAddon = std::static_pointer_cast<ODSensorPlugin>(pluginManager->getPlugin(odSensorEdit->text().toUtf8().constData()));
          if (odAddon) {
-            node->setOd(std::shared_ptr<ODSensor>(odAddon));
+            node->setOd(odAddon);
          } else {
              LOG(ERROR) << "wrong cast to " << odSensorEdit->text().toUtf8().constData();
          }

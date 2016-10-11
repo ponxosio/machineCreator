@@ -117,12 +117,12 @@ protected:
     ExecutableContainerNode* createBidirectionalSwitch(float capacity);
 
     template<class T>
-    T* extractPlugin(const std::string & param) {
+    std::shared_ptr<T> extractPlugin(const std::string & param) {
         auto finded = pluginLineEditMap.find(param);
         if (finded != pluginLineEditMap.end()) {
             std::string pluginName = finded->second->text().toUtf8().constData();
-            SelfConfiguringPlugin* plugin = pluginManager->getPlugin(pluginName);
-            return static_cast<T*>(plugin);
+            std::shared_ptr<SelfConfiguringPlugin> plugin = pluginManager->getPlugin(pluginName);
+            return std::static_pointer_cast<T>(plugin);
         } else {
             LOG(ERROR) << "no line edit with name " << param;
             return NULL;

@@ -63,8 +63,8 @@ public:
     PluginManager();
     virtual ~PluginManager();
 
-    void insertPlugin(const std::string & superclass, const std::string pluginClass, const std::string & name, SelfConfiguringPlugin* plugin);
-    SelfConfiguringPlugin* getPlugin(const std::string & name);
+    void insertPlugin(const std::string & superclass, const std::string pluginClass, const std::string & name, std::shared_ptr<SelfConfiguringPlugin> plugin);
+    std::shared_ptr<SelfConfiguringPlugin> getPlugin(const std::string & name);
     SelfConfiguringPlugin* makeNewPlugin(const std::string & superclass, const std::string & type, const std::unordered_map<std::string,std::string> & params) throw (std::invalid_argument);
 
     std::vector<QStandardItem*> getAllClassItems();
@@ -85,7 +85,7 @@ public slots:
 
 protected:
     QStandardItemModel* model;
-    std::unordered_map<std::string, SelfConfiguringPlugin*> namePluginMap;
+    std::unordered_map<std::string, std::shared_ptr<SelfConfiguringPlugin>> namePluginMap;
     std::unordered_map<std::string, SelfConfiguringPlugin*> superclassPrototypeMap;
     AutoEnumerate serial;
 

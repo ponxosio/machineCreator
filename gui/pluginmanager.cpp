@@ -16,7 +16,7 @@ PluginManager::~PluginManager()
     delete model;
 }
 
-void PluginManager::insertPlugin(const std::string & superclass, const std::string pluginClass, const std::string & name, SelfConfiguringPlugin* plugin)
+void PluginManager::insertPlugin(const std::string & superclass, const std::string pluginClass, const std::string & name, std::shared_ptr<SelfConfiguringPlugin> plugin)
 {
     QStandardItem* actual = getItem(superclass, pluginClass);
     if (actual == 0) {
@@ -28,8 +28,8 @@ void PluginManager::insertPlugin(const std::string & superclass, const std::stri
     }
 }
 
-SelfConfiguringPlugin* PluginManager::getPlugin(const std::string & name) {
-    SelfConfiguringPlugin* finded = NULL;
+std::shared_ptr<SelfConfiguringPlugin> PluginManager::getPlugin(const std::string & name) {
+    std::shared_ptr<SelfConfiguringPlugin> finded = NULL;
     auto it = namePluginMap.find(name);
 
     if (it != namePluginMap.end()) {
@@ -229,7 +229,7 @@ void PluginManager::importInlet(shared_ptr<InletContainer> inlet, std::unordered
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(inlet->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr.get());
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
     }
 }
 
@@ -238,7 +238,7 @@ void PluginManager::importSink(shared_ptr<SinkContainer> sink,  std::unordered_s
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(sink->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj.get());
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
     }
 }
 
@@ -247,12 +247,12 @@ void PluginManager::importFlow(shared_ptr<FlowContainer> flow,  std::unordered_s
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(flow->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr.get());
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
     }
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(flow->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj.get());
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
     }
 }
 
@@ -261,12 +261,12 @@ void PluginManager::importDivergentSwitch(shared_ptr<DivergentSwitch> divergentS
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(divergentSwitch->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr.get());
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
     }
     std::shared_ptr<SelfConfiguringPlugin> ctr = extractPlugin<Control, ControlPlugin>(divergentSwitch->getControl());
     if (ctr && set.find(ctr) == set.end()) {
         set.insert(ctr);
-        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr.get());
+        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr);
     }
 }
 
@@ -275,12 +275,12 @@ void PluginManager::importConvergentSwitch(shared_ptr<ConvergentSwitch> converge
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(convergentSwitch->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj.get());
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
     }
     std::shared_ptr<SelfConfiguringPlugin> ctr = extractPlugin<Control, ControlPlugin>(convergentSwitch->getControl());
     if (ctr && set.find(ctr) == set.end()) {
         set.insert(ctr);
-        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr.get());
+        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr);
     }
 }
 
@@ -289,17 +289,17 @@ void PluginManager::importDivergentSwitchSink(shared_ptr<DivergentSwitchSink> di
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(divergentSwitchSink->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr.get());
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
     }
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(divergentSwitchSink->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj.get());
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
     }
     std::shared_ptr<SelfConfiguringPlugin> ctr = extractPlugin<Control, ControlPlugin>(divergentSwitchSink->getControl());
     if (ctr && set.find(ctr) == set.end()) {
         set.insert(ctr);
-        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr.get());
+        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr);
     }
 }
 
@@ -308,17 +308,17 @@ void PluginManager::importConvergentSwitchInlet(shared_ptr<ConvergentSwitchInlet
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(convergentSwitchSink->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr.get());
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
     }
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(convergentSwitchSink->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj.get());
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
     }
     std::shared_ptr<SelfConfiguringPlugin> ctr = extractPlugin<Control, ControlPlugin>(convergentSwitchSink->getControl());
     if (ctr && set.find(ctr) == set.end()) {
         set.insert(ctr);
-        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr.get());
+        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr);
     }
 }
 
@@ -327,22 +327,22 @@ void PluginManager::importBidirectionalSwitch(shared_ptr<BidirectionalSwitch> bi
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(bidirectionalswitch->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr.get());
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
     }
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(bidirectionalswitch->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj.get());
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
     }
     std::shared_ptr<SelfConfiguringPlugin> ctrin = extractPlugin<Control, ControlPlugin>(bidirectionalswitch->getControlIn());
     if (ctrin && set.find(ctrin) == set.end()) {
         set.insert(ctrin);
-        insertPlugin(CONTROL_STR, ctrin->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctrin.get());
+        insertPlugin(CONTROL_STR, ctrin->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctrin);
     }
     std::shared_ptr<SelfConfiguringPlugin> ctrout = extractPlugin<Control, ControlPlugin>(bidirectionalswitch->getControlOut());
     if (ctrout && set.find(ctrout) == set.end()) {
         set.insert(ctrout);
-        insertPlugin(CONTROL_STR, ctrout->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctrout.get());
+        insertPlugin(CONTROL_STR, ctrout->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctrout);
     }
 }
 
@@ -351,28 +351,28 @@ void PluginManager::importAddons(std::shared_ptr<ExecutableContainerNode> node, 
         std::shared_ptr<SelfConfiguringPlugin> light = extractPlugin<Light, LightPlugin>(node->getLight());
         if (light && set.find(light) != set.end()) {
             set.insert(light);
-            insertPlugin(LIGHT_STR, light->getPluginType(), "p" + patch::to_string(serial.getNextValue()), light.get());
+            insertPlugin(LIGHT_STR, light->getPluginType(), "p" + patch::to_string(serial.getNextValue()), light);
         }
     }
     if (node->getMix()) {
         std::shared_ptr<SelfConfiguringPlugin> mix = extractPlugin<Mixer, MixerPlugin>(node->getMix());
         if (mix && set.find(mix) != set.end()) {
             set.insert(mix);
-            insertPlugin(MIXER_STR, mix->getPluginType(), "p" + patch::to_string(serial.getNextValue()), mix.get());
+            insertPlugin(MIXER_STR, mix->getPluginType(), "p" + patch::to_string(serial.getNextValue()), mix);
         }
     }
     if (node->getTemperature()) {
         std::shared_ptr<SelfConfiguringPlugin> temp = extractPlugin<Temperature, TemperaturePlugin>(node->getTemperature());
         if (temp && set.find(temp) != set.end()) {
             set.insert(temp);
-            insertPlugin(TEMPERATURE_STR, temp->getPluginType(), "p" + patch::to_string(serial.getNextValue()), temp.get());
+            insertPlugin(TEMPERATURE_STR, temp->getPluginType(), "p" + patch::to_string(serial.getNextValue()), temp);
         }
     }
     if (node->getOd()) {
         std::shared_ptr<SelfConfiguringPlugin> od = extractPlugin<ODSensor, ODSensorPlugin>(node->getOd());
         if (od && set.find(od) != set.end()) {
             set.insert(od);
-            insertPlugin(ODSENSOR_STR, od->getPluginType(), "p" + patch::to_string(serial.getNextValue()), od.get());
+            insertPlugin(ODSENSOR_STR, od->getPluginType(), "p" + patch::to_string(serial.getNextValue()), od);
         }
     }
 }

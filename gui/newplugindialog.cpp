@@ -63,9 +63,10 @@ void NewPluginDialog::done() {
     for (auto it = params.begin(); it != params.end(); ++it) {
         paramsMap.insert(make_pair((*it).first, (*it).second->text().toUtf8().constData()));
     }
-    SelfConfiguringPlugin* createdPlugin = pluginManager->makeNewPlugin(selectedItem->parent()->text().toUtf8().constData(),
+    std::shared_ptr<SelfConfiguringPlugin> createdPlugin = std::shared_ptr<SelfConfiguringPlugin>(
+                                pluginManager->makeNewPlugin(selectedItem->parent()->text().toUtf8().constData(),
                                                        selectedItem->text().toUtf8().constData(),
-                                                       paramsMap);
+                                                       paramsMap));
     pluginManager->insertPlugin(selectedItem->parent()->text().toUtf8().constData(),
                                 selectedItem->text().toUtf8().constData(),
                                 nameLineEdit->text().toUtf8().constData(),

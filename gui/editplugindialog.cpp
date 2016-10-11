@@ -1,6 +1,6 @@
 #include "editplugindialog.h"
 
-EditPluginDialog::EditPluginDialog(const std::string & name, SelfConfiguringPlugin* plugin, QWidget* parent, Qt::WindowFlags f) :
+EditPluginDialog::EditPluginDialog(const std::string & name, std::shared_ptr<SelfConfiguringPlugin> plugin, QWidget* parent, Qt::WindowFlags f) :
     QDialog(parent, f)
 {
     setWindowTitle("Edit plugin " + QString::fromStdString(name));

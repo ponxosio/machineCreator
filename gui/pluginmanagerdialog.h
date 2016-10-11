@@ -43,13 +43,13 @@ protected:
     PluginManager* pluginManager;
     QGroupBox* actualGroupBox;
     QGridLayout* actualLayout;
-    SelfConfiguringPlugin* selectedPlugin;
+    std::shared_ptr<SelfConfiguringPlugin> selectedPlugin;
     std::string selectedPluginName;
     QPushButton* editBtn;
     QPushButton* acceptBtn;
 
     void makeDefaultGroupBox();
-    void makePluginGroupBox(SelfConfiguringPlugin* plugin);
+    void makePluginGroupBox(std::shared_ptr<SelfConfiguringPlugin> plugin);
     void clearsActualLayout();
 };
 

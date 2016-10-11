@@ -4,7 +4,7 @@ PluginManagerDialog::PluginManagerDialog(PluginManager* pluginManager, QWidget* 
     QDialog(parent, f)
 {
     setWindowTitle("Plugin Manager");
-    this->selectedPlugin = NULL;
+    this->selectedPlugin = std::shared_ptr<SelfConfiguringPlugin>();
     this->pluginManager = pluginManager;
     QTreeView* treeview = new QTreeView(this);
 
@@ -101,7 +101,7 @@ void PluginManagerDialog::makeDefaultGroupBox()
     actualLayout->update();
 }
 
-void PluginManagerDialog::makePluginGroupBox(SelfConfiguringPlugin* plugin)
+void PluginManagerDialog::makePluginGroupBox(std::shared_ptr<SelfConfiguringPlugin> plugin)
 {
     clearsActualLayout();
     unordered_map<string,string> params = plugin->getParams();
