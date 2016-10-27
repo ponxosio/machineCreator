@@ -3,6 +3,8 @@
 NewContainerDialog::NewContainerDialog(GraphicsManager* manager, PluginManager* pluginManager, QWidget* parent, Qt::WindowFlags f) :
     QDialog(parent, f)
 {
+    setWindowTitle("Create Container");
+
     this->manager = manager;
     this->pluginManager = pluginManager;
     this->actualType = INLET_NAME;
