@@ -6,7 +6,7 @@ EditPluginDialog::EditPluginDialog(const std::string & name, std::shared_ptr<Sel
     setWindowTitle("Edit plugin " + QString::fromStdString(name));
     this->plugin = plugin;
     std::unordered_map<std::string, std::string> actualParams = plugin->getParams();
-    std::vector<std::pair<std::string, std::string>> typeParams = SelfConfiguringPlugin::getParamsType(plugin->getPluginType());
+    std::vector<std::pair<std::string, std::string>> typeParams = PythonEnvironment::GetInstance()->getParamsType(plugin->getPluginType());
 
     QPushButton* acceptBtn = new QPushButton("Accept");
     QPushButton* cancelBtn = new QPushButton("Cancel");

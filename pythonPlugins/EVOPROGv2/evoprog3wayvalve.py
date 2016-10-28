@@ -1,34 +1,37 @@
 import time
 from control import Control
 
-class EvoprogSixWayValve(Control):
+class Evoprog3WayValve(Control):
 	def __init__(self, params):
 		"""constructor"""
-		super(EvoprogSixWayValve, self).__init__(params)
-		self.valveNumber = int(params["valve_number"])
+		super(Evoprog3WayValve, self).__init__(4)
+		self.address = int(params["address"])
+		self.closePos = int(params["closePos"])
+		self.availablePos = range(self.maxconnections)
+		self.availablePos.remove(self.closePos)
+		self.motorPositions = [0,1,2,3]
 		self.map = {}
-		self.lastPos = 0
 
 	@classmethod
 	def getParamsType(cls):
 		"""must return a list with the types expected at the params variable in the init function"""
 		dict = {}
-		dict["valve_number"] = "int"
-		dict.update(super(EvoprogSixWayValve, cls).getParamsType())
+		dict["address"] = "int"
+		dict["closePos"] = "int"
+		dict.update(super(Evoprog3WayValve, cls).getParamsType())
 		return dict
 
 	def getInstructions(self):
 		""" must return a string with the instructions to make this component"""
 		return ""
 
-	def addConnection(self, idSource, idTarget, communications):
+	def addConnection(self, idSource, idTarget, pos, communications):
 		"""
 			must register a new connection between idSource container and idTarget container
 		"""
-		if self.lastPos <= 6 :
-			self.map[(idSource, idTarget)] = self.lastPos
-			self.lastPos += 1
-			
+		if pos != -1:
+			if pos in self.availablePos :
+				self.map[(idSource, idTarget)] = self.motorPositions[pos]
 
 	def setConnection(self, idSource, idTarget, communications):
 		"""
@@ -40,15 +43,26 @@ class EvoprogSixWayValve(Control):
 				*) string readUntil(endCharacter) -- returns a string received from the machine, stops when the endCharacter arrives;
 				*) void synch() -- synchronize with the machine, not always necesary, only for protocols compatibles;
 		"""
-		valvePos = self.map[(idSource, idTarget)]
-		command = "MOVE " + str(self.valveNumber) + " " + str(valvePos)
+		valvePos = self.closePos
+		if (idSource, idTarget) in self.map:
+			valvePos = self.map[(idSource, idTarget)]
 		
-		communications.sendString(command)
-		time.sleep(0.01)
-		communications.synch()
+		if valvePos != -1:
+			command = "M " + str(self.address) + " " + str(valvePos) + "\r"
+			print command
+			communications.sendString(command)
+			communications.synch()
 
 	def clearConnections(self):
 		"""
 			must removed all the connections added with addConnection
 		"""
+		self.availablePos = range(self.maxconnections)
+		self.availablePos.remove(self.closePos)
 		self.map.clear()
+
+	def getAvailablePos(self, communications):
+		"""
+			return the available position of the valve
+		"""
+		return self.availablePos

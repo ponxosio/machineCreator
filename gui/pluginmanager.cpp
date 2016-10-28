@@ -40,15 +40,25 @@ std::shared_ptr<SelfConfiguringPlugin> PluginManager::getPlugin(const std::strin
     return finded;
 }
 
-SelfConfiguringPlugin* PluginManager::makeNewPlugin(const std::string & superclass, const std::string & type, const std::unordered_map<std::string,std::string> & params) throw (std::invalid_argument) {
-    auto it = superclassPrototypeMap.find(superclass);
-    if (it != superclassPrototypeMap.end()) {
-        SelfConfiguringPlugin* newPlugin = it->second->clone();
-        newPlugin->setPluginType(type);
-        newPlugin->setParams(params);
-        return newPlugin;
+SelfConfiguringPlugin* PluginManager::makeNewPlugin(const std::string & name, const std::string & superclass, const std::string & type, const std::unordered_map<std::string,std::string> & params) throw (std::invalid_argument) {
+    if (superclass.compare(ABSTRACT_STR) == 0) {
+        SelfConfiguringPlugin* abstractPlugin = makeAbstractPlugin(name, type, params);
+        if (abstractPlugin) {
+            return abstractPlugin;
+        } else {
+            throw(new std::invalid_argument("error while creating abstract plugin: " + type));
+        }
     } else {
-        throw(new std::invalid_argument(superclass + " is not a valid superClass"));
+        auto it = superclassPrototypeMap.find(superclass);
+        if (it != superclassPrototypeMap.end()) {
+            SelfConfiguringPlugin* newPlugin = it->second->clone();
+            newPlugin->setPluginType(type);
+            newPlugin->setParams(params);
+            newPlugin->setName(name);
+            return newPlugin;
+        } else {
+            throw(new std::invalid_argument(superclass + " is not a valid superClass"));
+        }
     }
 }
 
@@ -133,6 +143,8 @@ void PluginManager::createModel() {
             rowClass[index] << new QStandardItem(QString::fromStdString(*it));
         }
     }
+    rowClass[abstract_superclass] << new QStandardItem("compoundControl");
+    rowClass[abstract_superclass] << new QStandardItem("valveControlledTwinPump");
 
     for (int i = 0; i < SuperClassType::SUPERCLASS_MAX; i++) {
         rowSuperclass.at(i)->appendColumn(rowClass[i]);
@@ -158,6 +170,8 @@ int PluginManager::indexOfSuperClass(const std::string & superclass) {
         index = SuperClassType::temp_superclass;
     } else if (qSuperclass.compare(ODSENSOR_STR, Qt::CaseInsensitive) == 0) {
         index = SuperClassType::OD_sensor_superclass;
+    } else if (qSuperclass.compare(ABSTRACT_STR, Qt::CaseInsensitive) == 0) {
+        index = SuperClassType::abstract_superclass;
     } else {
         LOG(WARNING) << "unknow super class: " << superclass;
     }
@@ -187,6 +201,9 @@ std::string PluginManager::strOfSuperclass(SuperClassType superclass) {
         break;
     case SuperClassType::OD_sensor_superclass:
         str = ODSENSOR_STR;
+        break;
+    case SuperClassType::abstract_superclass:
+        str = ABSTRACT_STR;
         break;
     }
     return str;
@@ -229,7 +246,7 @@ void PluginManager::importInlet(shared_ptr<InletContainer> inlet, std::unordered
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(inlet->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), extr->getName(), extr);
     }
 }
 
@@ -238,7 +255,7 @@ void PluginManager::importSink(shared_ptr<SinkContainer> sink,  std::unordered_s
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(sink->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), inj->getName(), inj);
     }
 }
 
@@ -247,12 +264,12 @@ void PluginManager::importFlow(shared_ptr<FlowContainer> flow,  std::unordered_s
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(flow->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), extr->getName(), extr);
     }
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(flow->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), inj->getName(), inj);
     }
 }
 
@@ -261,12 +278,22 @@ void PluginManager::importDivergentSwitch(shared_ptr<DivergentSwitch> divergentS
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(divergentSwitch->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), extr->getName(), extr);
     }
+
     std::shared_ptr<SelfConfiguringPlugin> ctr = extractPlugin<Control, ControlPlugin>(divergentSwitch->getControl());
-    if (ctr && set.find(ctr) == set.end()) {
-        set.insert(ctr);
-        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr);
+    if (ctr) {
+        if(set.find(ctr) == set.end()) {
+            set.insert(ctr);
+            insertPlugin(CONTROL_STR, ctr->getPluginType(), ctr->getName(), ctr);
+        }
+    } else {
+        ctr = extractPlugin<Control, CompoundControlPlugin>(divergentSwitch->getControl());
+        if (ctr && set.find(ctr) == set.end()) {
+            set.insert(ctr);
+            insertAbstractPlugin(ctr->getPluginType(), ctr, set);
+            insertPlugin(ABSTRACT_STR, ctr->getPluginType(), ctr->getName(), ctr);
+        }
     }
 }
 
@@ -275,12 +302,21 @@ void PluginManager::importConvergentSwitch(shared_ptr<ConvergentSwitch> converge
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(convergentSwitch->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), inj->getName(), inj);
     }
     std::shared_ptr<SelfConfiguringPlugin> ctr = extractPlugin<Control, ControlPlugin>(convergentSwitch->getControl());
-    if (ctr && set.find(ctr) == set.end()) {
-        set.insert(ctr);
-        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr);
+    if (ctr) {
+        if(set.find(ctr) == set.end()) {
+            set.insert(ctr);
+            insertPlugin(CONTROL_STR, ctr->getPluginType(), ctr->getName(), ctr);
+        }
+    } else {
+        ctr = extractPlugin<Control, CompoundControlPlugin>(convergentSwitch->getControl());
+        if (ctr && set.find(ctr) == set.end()) {
+            set.insert(ctr);
+            insertAbstractPlugin(ctr->getPluginType(), ctr, set);
+            insertPlugin(ABSTRACT_STR, ctr->getPluginType(), ctr->getName(), ctr);
+        }
     }
 }
 
@@ -289,17 +325,26 @@ void PluginManager::importDivergentSwitchSink(shared_ptr<DivergentSwitchSink> di
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(divergentSwitchSink->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), extr->getName(), extr);
     }
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(divergentSwitchSink->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), inj->getName(), inj);
     }
     std::shared_ptr<SelfConfiguringPlugin> ctr = extractPlugin<Control, ControlPlugin>(divergentSwitchSink->getControl());
-    if (ctr && set.find(ctr) == set.end()) {
-        set.insert(ctr);
-        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr);
+    if (ctr) {
+        if(set.find(ctr) == set.end()) {
+            set.insert(ctr);
+            insertPlugin(CONTROL_STR, ctr->getPluginType(), ctr->getName(), ctr);
+        }
+    } else {
+        ctr = extractPlugin<Control, CompoundControlPlugin>(divergentSwitchSink->getControl());
+        if (ctr && set.find(ctr) == set.end()) {
+            set.insert(ctr);
+            insertAbstractPlugin(ctr->getPluginType(), ctr, set);
+            insertPlugin(ABSTRACT_STR, ctr->getPluginType(), ctr->getName(), ctr);
+        }
     }
 }
 
@@ -308,17 +353,27 @@ void PluginManager::importConvergentSwitchInlet(shared_ptr<ConvergentSwitchInlet
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(convergentSwitchSink->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), extr->getName(), extr);
     }
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(convergentSwitchSink->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), inj->getName(), inj);
     }
+
     std::shared_ptr<SelfConfiguringPlugin> ctr = extractPlugin<Control, ControlPlugin>(convergentSwitchSink->getControl());
-    if (ctr && set.find(ctr) == set.end()) {
-        set.insert(ctr);
-        insertPlugin(CONTROL_STR, ctr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctr);
+    if (ctr) {
+        if(set.find(ctr) == set.end()) {
+            set.insert(ctr);
+            insertPlugin(CONTROL_STR, ctr->getPluginType(), ctr->getName(), ctr);
+        }
+    } else {
+        ctr = extractPlugin<Control, CompoundControlPlugin>(convergentSwitchSink->getControl());
+        if (ctr && set.find(ctr) == set.end()) {
+            set.insert(ctr);
+            insertAbstractPlugin(ctr->getPluginType(), ctr, set);
+            insertPlugin(ABSTRACT_STR, ctr->getPluginType(), ctr->getName(), ctr);
+        }
     }
 }
 
@@ -327,22 +382,42 @@ void PluginManager::importBidirectionalSwitch(shared_ptr<BidirectionalSwitch> bi
     std::shared_ptr<SelfConfiguringPlugin> extr = extractPlugin<Extractor, ExtractorPlugin>(bidirectionalswitch->getExtractor());
     if (extr && set.find(extr) == set.end()) {
         set.insert(extr);
-        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), "p" + patch::to_string(serial.getNextValue()), extr);
+        insertPlugin(EXTRACTOR_STR, extr->getPluginType(), extr->getName(), extr);
     }
     std::shared_ptr<SelfConfiguringPlugin> inj = extractPlugin<Injector, InjectorPlugin>(bidirectionalswitch->getInjector());
     if (inj && set.find(inj) == set.end()) {
         set.insert(inj);
-        insertPlugin(INJECTOR_STR, inj->getPluginType(), "p" + patch::to_string(serial.getNextValue()), inj);
+        insertPlugin(INJECTOR_STR, inj->getPluginType(), inj->getName(), inj);
     }
+
     std::shared_ptr<SelfConfiguringPlugin> ctrin = extractPlugin<Control, ControlPlugin>(bidirectionalswitch->getControlIn());
-    if (ctrin && set.find(ctrin) == set.end()) {
-        set.insert(ctrin);
-        insertPlugin(CONTROL_STR, ctrin->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctrin);
+    if (ctrin) {
+        if(set.find(ctrin) == set.end()) {
+            set.insert(ctrin);
+            insertPlugin(CONTROL_STR, ctrin->getPluginType(), ctrin->getName(), ctrin);
+        }
+    } else {
+        ctrin = extractPlugin<Control, CompoundControlPlugin>(bidirectionalswitch->getControlIn());
+        if (ctrin && set.find(ctrin) == set.end()) {
+            set.insert(ctrin);
+            insertAbstractPlugin(ctrin->getPluginType(), ctrin, set);
+            insertPlugin(ABSTRACT_STR, ctrin->getPluginType(), ctrin->getName(), ctrin);
+        }
     }
+
     std::shared_ptr<SelfConfiguringPlugin> ctrout = extractPlugin<Control, ControlPlugin>(bidirectionalswitch->getControlOut());
-    if (ctrout && set.find(ctrout) == set.end()) {
-        set.insert(ctrout);
-        insertPlugin(CONTROL_STR, ctrout->getPluginType(), "p" + patch::to_string(serial.getNextValue()), ctrout);
+    if (ctrout) {
+        if(set.find(ctrout) == set.end()) {
+            set.insert(ctrout);
+            insertPlugin(CONTROL_STR, ctrout->getPluginType(), ctrout->getName(), ctrout);
+        }
+    } else {
+        ctrout = extractPlugin<Control, CompoundControlPlugin>(bidirectionalswitch->getControlOut());
+        if (ctrout && set.find(ctrout) == set.end()) {
+            set.insert(ctrout);
+            insertAbstractPlugin(ctrout->getPluginType(), ctrout, set);
+            insertPlugin(ABSTRACT_STR, ctrout->getPluginType(), ctrout->getName(), ctrout);
+        }
     }
 }
 
@@ -351,28 +426,88 @@ void PluginManager::importAddons(std::shared_ptr<ExecutableContainerNode> node, 
         std::shared_ptr<SelfConfiguringPlugin> light = extractPlugin<Light, LightPlugin>(node->getLight());
         if (light && set.find(light) != set.end()) {
             set.insert(light);
-            insertPlugin(LIGHT_STR, light->getPluginType(), "p" + patch::to_string(serial.getNextValue()), light);
+            insertPlugin(LIGHT_STR, light->getPluginType(), light->getName(), light);
         }
     }
     if (node->getMix()) {
         std::shared_ptr<SelfConfiguringPlugin> mix = extractPlugin<Mixer, MixerPlugin>(node->getMix());
         if (mix && set.find(mix) != set.end()) {
             set.insert(mix);
-            insertPlugin(MIXER_STR, mix->getPluginType(), "p" + patch::to_string(serial.getNextValue()), mix);
+            insertPlugin(MIXER_STR, mix->getPluginType(), mix->getName(), mix);
         }
     }
     if (node->getTemperature()) {
         std::shared_ptr<SelfConfiguringPlugin> temp = extractPlugin<Temperature, TemperaturePlugin>(node->getTemperature());
         if (temp && set.find(temp) != set.end()) {
             set.insert(temp);
-            insertPlugin(TEMPERATURE_STR, temp->getPluginType(), "p" + patch::to_string(serial.getNextValue()), temp);
+            insertPlugin(TEMPERATURE_STR, temp->getPluginType(), temp->getName(), temp);
         }
     }
     if (node->getOd()) {
         std::shared_ptr<SelfConfiguringPlugin> od = extractPlugin<ODSensor, ODSensorPlugin>(node->getOd());
         if (od && set.find(od) != set.end()) {
             set.insert(od);
-            insertPlugin(ODSENSOR_STR, od->getPluginType(), "p" + patch::to_string(serial.getNextValue()), od);
+            insertPlugin(ODSENSOR_STR, od->getPluginType(), od->getName(), od);
+        }
+    }
+}
+
+SelfConfiguringPlugin* PluginManager::makeAbstractPlugin(const std::string & name, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params) {
+    if (pluginType.compare("compoundControl") == 0) {
+        std::vector<std::shared_ptr<ControlPlugin>> controls;
+        auto valves = params.find("list_of_controls");
+
+        if (valves != params.end()) {
+            QString value = QString::fromStdString(valves->second);
+            QStringList tokens = value.split(';');
+
+            for (QString pluginName : tokens) {
+                std::shared_ptr<ControlPlugin> plugin = std::static_pointer_cast<ControlPlugin>(getPlugin(pluginName.toUtf8().constData()));
+                controls.push_back(plugin);
+            }
+
+            CompoundControlPlugin* compoundValve = new CompoundControlPlugin(-1, name, params,controls);
+            return compoundValve;
+        }
+    } else if (pluginType.compare("valveControlledTwinPump") == 0) {
+        auto pump1 = params.find("pump1");
+        auto pump2 = params.find("pump2");
+        auto control = params.find("controlActuator");
+        auto positions = params.find("positionsPump1Works");
+
+        if (pump1 != params.end() &&
+            pump2 != params.end() &&
+            control != params.end() &&
+            positions != params.end())
+        {
+            std::vector<int> positionsVextor;
+            std::shared_ptr<ExtractorPlugin> pump1Plugin =  std::static_pointer_cast<ExtractorPlugin>(getPlugin(pump1->second));
+            std::shared_ptr<ExtractorPlugin> pump2Plugin =  std::static_pointer_cast<ExtractorPlugin>(getPlugin(pump2->second));
+            std::shared_ptr<ControlPlugin> controlPlugin =  std::static_pointer_cast<ControlPlugin>(getPlugin(control->second));
+
+            QString positionsQs = QString::fromStdString(positions->second);
+            QStringList tokens = positionsQs.split(';');
+            for (QString pos: tokens) {
+                positionsVextor.push_back(pos.toInt());
+            }
+
+            ValveControlledTwinPump* pumps = new ValveControlledTwinPump(-1, name, params, pump1Plugin, pump2Plugin, controlPlugin, positionsVextor);
+            return pumps;
+        }
+    }
+    return NULL;
+}
+
+void PluginManager::insertAbstractPlugin(const std::string pluginClass, std::shared_ptr<SelfConfiguringPlugin> plugin, std::unordered_set<std::shared_ptr<SelfConfiguringPlugin>> & set) {
+    if (pluginClass.compare("compoundControl") == 0) {
+        std::shared_ptr<CompoundControlPlugin> cast = std::dynamic_pointer_cast<CompoundControlPlugin>(plugin);
+        std::shared_ptr<std::map<int, std::shared_ptr<ControlPlugin>>> valves = cast->getVirtualPosMap();
+
+        for (auto it = valves->begin(); it != valves->end(); ++it) {
+            if (it->second && set.find(it->second) == set.end()) {
+                set.insert(it->second);
+                insertPlugin(CONTROL_STR, it->second->getPluginType(), it->second->getName(), it->second);
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ CustomContainerItem* GraphicsManager::addContainer(const std::string &name, std:
     CustomContainerItem* item = new CustomContainerItem(QString::fromStdString(name), QPixmap(QString::fromUtf8( imgPath.data(), imgPath.size())), addons);
 
     container->setContainerId(serial.getNextValue());
-    machine.addContainer(container);
+    machine.addContainer(container, name);
     scene->addItem(item);
     nodesMap.insert(item, container);
 
@@ -108,6 +108,7 @@ void GraphicsManager::importMachine(ExecutableMachineGraph* machine) {
     clearScene();
     ExecutableMachineGraph::ExecutableContainerNodeVectorPtr nodes = machine->getGraph()->getAllNodes();
     for (ExecutableMachineGraph::ExecutableContainerNodePtr actualNode: *(nodes.get())) {
+        std::string alias = machine->getAlias(actualNode->getContainerId());
         CustomContainerItem* graphItem = addContainer(actualNode);
         nodeMaps.insert(actualNode->getContainerId(), graphItem);
         maxId = qMax(maxId, actualNode->getContainerId());
@@ -167,4 +168,7 @@ void GraphicsManager::setExecPrototype(std::unique_ptr<CommandSender> execProtot
     machine.setExecCommunicationsPrototype(std::move(execPrototype));
 }
 
+std::shared_ptr<ExecutableContainerNode> GraphicsManager::getExecutableContainer(CustomContainerItem* graphicContainer) {
+    return nodesMap[graphicContainer];
+}
 

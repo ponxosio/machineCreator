@@ -122,7 +122,7 @@ protected:
         if (finded != pluginLineEditMap.end()) {
             std::string pluginName = finded->second->text().toUtf8().constData();
             std::shared_ptr<SelfConfiguringPlugin> plugin = pluginManager->getPlugin(pluginName);
-            return std::static_pointer_cast<T>(plugin);
+            return std::dynamic_pointer_cast<T>(plugin);
         } else {
             LOG(ERROR) << "no line edit with name " << param;
             return NULL;

@@ -1,24 +1,24 @@
 import time
 from control import Control
 
-class Evoprog2WayValve(Control):
+class EvoprogDummyValve(Control):
 	def __init__(self, params):
 		"""constructor"""
-		super(Evoprog2WayValve, self).__init__(2)
-		self.address = int(params["address"])
+		super(EvoprogDummyValve, self).__init__(int(params["max_connections"]))
+		self.valveNumber = int(params["valve_number"])
 		self.closePos = int(params["closePos"])
 		self.availablePos = range(self.maxconnections + 1)
 		self.availablePos.remove(self.closePos)
-		self.motorPositions = [0,2,4]
 		self.map = {}
 
 	@classmethod
 	def getParamsType(cls):
 		"""must return a list with the types expected at the params variable in the init function"""
 		dict = {}
-		dict["address"] = "int"
+		dict["valve_number"] = "int"
+		dict["max_connections"] = "int"
 		dict["closePos"] = "int"
-		dict.update(super(Evoprog2WayValve, cls).getParamsType())
+		dict.update(super(EvoprogDummyValve, cls).getParamsType())
 		return dict
 
 	def getInstructions(self):
@@ -30,9 +30,9 @@ class Evoprog2WayValve(Control):
 			must register a new connection between idSource container and idTarget container
 		"""
 		if pos == -1:
-			self.map[(idSource, idTarget)] = -1
+			self.map[(idSource, idTarget)] = pos
 		elif pos in self.availablePos :
-			self.map[(idSource, idTarget)] = self.motorPositions[pos]
+			self.map[(idSource, idTarget)] = pos
 			self.availablePos.remove(pos)
 
 	def setConnection(self, idSource, idTarget, communications):
@@ -50,8 +50,7 @@ class Evoprog2WayValve(Control):
 			valvePos = self.map[(idSource, idTarget)]
 		
 		if valvePos != -1:
-			command = "M " + str(self.address) + " " + str(valvePos) + "\r"
-			print command
+			command = "MOVE " + str(self.valveNumber) + " " + str(valvePos)
 			communications.sendString(command)
 			communications.synch()
 
@@ -59,9 +58,9 @@ class Evoprog2WayValve(Control):
 		"""
 			must removed all the connections added with addConnection
 		"""
-		self.availablePos = range(self.maxconnections + 1)
-		self.availablePos.remove(self.closePos)
 		self.map.clear()
+		self.availablePos = range(self.maxconnections)
+		self.availablePos.remove(self.closePos)
 
 	def getAvailablePos(self, communications):
 		"""

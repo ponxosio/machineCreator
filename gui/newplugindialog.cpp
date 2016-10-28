@@ -64,7 +64,8 @@ void NewPluginDialog::done() {
         paramsMap.insert(make_pair((*it).first, (*it).second->text().toUtf8().constData()));
     }
     std::shared_ptr<SelfConfiguringPlugin> createdPlugin = std::shared_ptr<SelfConfiguringPlugin>(
-                                pluginManager->makeNewPlugin(selectedItem->parent()->text().toUtf8().constData(),
+                                pluginManager->makeNewPlugin(nameLineEdit->text().toUtf8().constData(),
+                                                       selectedItem->parent()->text().toUtf8().constData(),
                                                        selectedItem->text().toUtf8().constData(),
                                                        paramsMap));
     pluginManager->insertPlugin(selectedItem->parent()->text().toUtf8().constData(),
@@ -98,7 +99,7 @@ void NewPluginDialog::createDefualtLayout() {
 void NewPluginDialog::createTypeLayout(const std::string & type) {
     clearsActualLayout();
     try {
-        std::vector<std::pair<std::string, std::string>> paramsTypes = SelfConfiguringPlugin::getParamsType(type);
+        std::vector<std::pair<std::string, std::string>> paramsTypes = PythonEnvironment::GetInstance()->getParamsType(type);
         this->params.clear();
 
         int i = 0;

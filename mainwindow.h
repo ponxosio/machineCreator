@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
+# include  "gui/connectcontainerdialog.h"
 # include "gui/graphicsmanager.h"
 # include "gui/pluginmanagerdialog.h"
 # include "gui/pluginmanager.h"

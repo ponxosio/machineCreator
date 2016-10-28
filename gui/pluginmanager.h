@@ -8,6 +8,7 @@
 #define LIGHT_STR "Light"
 #define TEMPERATURE_STR "Temperature"
 #define ODSENSOR_STR "OdSensor"
+#define ABSTRACT_STR "Abstract"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -38,6 +39,8 @@
 # include "plugin/actuators/MixerPlugin.h"
 # include "plugin/actuators/ODSensorPlugin.h"
 # include "plugin/actuators/TemperaturePlugin.h"
+# include "plugin/actuators/compoundcontrolplugin.h"
+# include "plugin/actuators/valvecontrolledtwinpump.h"
 # include "util/Patch.h"
 
 /*** Enum for the superclass of the plugins ***/
@@ -49,7 +52,8 @@ typedef enum SuperClassType_ {
     light_superclass,	// addon that apply light
     temp_superclass,  // addon that heat/cold a liquid
     OD_sensor_superclass, // addon that reads Optical density
-    SUPERCLASS_MAX = OD_sensor_superclass + 1 // Max number of Addons ALWAYS EQUALS TO THE SECOND-TO-LAST TYPE PLUS ONE
+    abstract_superclass,
+    SUPERCLASS_MAX = abstract_superclass + 1 // Max number of Addons ALWAYS EQUALS TO THE SECOND-TO-LAST TYPE PLUS ONE
 } SuperClassType;
 
 /**
@@ -65,7 +69,7 @@ public:
 
     void insertPlugin(const std::string & superclass, const std::string pluginClass, const std::string & name, std::shared_ptr<SelfConfiguringPlugin> plugin);
     std::shared_ptr<SelfConfiguringPlugin> getPlugin(const std::string & name);
-    SelfConfiguringPlugin* makeNewPlugin(const std::string & superclass, const std::string & type, const std::unordered_map<std::string,std::string> & params) throw (std::invalid_argument);
+    SelfConfiguringPlugin* makeNewPlugin(const std::string & name, const std::string & superclass, const std::string & type, const std::unordered_map<std::string,std::string> & params) throw (std::invalid_argument);
 
     std::vector<QStandardItem*> getAllClassItems();
     std::vector<QStandardItem*> getAllSuperClassItems();
@@ -91,9 +95,13 @@ protected:
 
     void createModel();
     void createPrototypes();
+
     int indexOfSuperClass(const std::string & superclass);
     std::string strOfSuperclass(SuperClassType superclass);
     QStandardItem* getItem(const std::string & superclass, const std::string & pluginClass);
+
+    SelfConfiguringPlugin* makeAbstractPlugin(const std::string & name, const std::string & pluginType, const std::unordered_map<std::string,std::string> & params);
+    void insertAbstractPlugin(const std::string pluginClass, std::shared_ptr<SelfConfiguringPlugin> plugin, std::unordered_set<std::shared_ptr<SelfConfiguringPlugin>> & set);
 
     void importInlet(shared_ptr<InletContainer> inlet, std::unordered_set<std::shared_ptr<SelfConfiguringPlugin>> & set);
     void importSink(shared_ptr<SinkContainer> sink,  std::unordered_set<std::shared_ptr<SelfConfiguringPlugin>> & set);

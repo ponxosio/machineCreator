@@ -201,7 +201,14 @@ void MainWindow::exportMachine() {
              QGraphicsItem* actualItem = items.back();
              if (dynamic_cast<CustomContainerItem*>(actualItem)) {
                  temp2Container = dynamic_cast<CustomContainerItem*>(actualItem);
-                 manager->connectContainers(temp1Container, temp2Container);
+
+                 ConnectContainerDialog controlConfigDialog(manager->getExecutableContainer(temp1Container),
+                                                            manager->getExecutableContainer(temp2Container),
+                                                            this, Qt::WindowTitleHint);
+
+                 if (controlConfigDialog.exec() == QDialog::Accepted) {
+                    manager->connectContainers(temp1Container, temp2Container);
+                 }
                  status = AplicationStatus::normal;
                  ui->statusBar->showMessage("Ready");
              } else {

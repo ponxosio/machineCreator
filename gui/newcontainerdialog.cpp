@@ -323,7 +323,7 @@ void NewContainerDialog::setBidirectionalSwitchDescription() {
 
  ExecutableContainerNode* NewContainerDialog::createInlet(float capacity) {
      ExecutableContainerNode* container = NULL;
-     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
+     std::shared_ptr<Extractor> extr = extractPlugin<Extractor>(EXTRACTOR_NAME);
      if (extr) {
          container = new InletContainer(-1, capacity, extr);
      }
@@ -332,7 +332,7 @@ void NewContainerDialog::setBidirectionalSwitchDescription() {
 
  ExecutableContainerNode* NewContainerDialog::createSink(float capacity) {
      ExecutableContainerNode* container = NULL;
-     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
+     std::shared_ptr<Injector> inj = extractPlugin<Injector>(INJECTOR_NAME);
      if (inj) {
         container = new SinkContainer(-1, capacity, inj);
      }
@@ -341,8 +341,8 @@ void NewContainerDialog::setBidirectionalSwitchDescription() {
 
  ExecutableContainerNode* NewContainerDialog::createFlow(float capacity) {
      ExecutableContainerNode* container = NULL;
-     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
+     std::shared_ptr<Extractor> extr = extractPlugin<Extractor>(EXTRACTOR_NAME);
+     std::shared_ptr<Injector> inj = extractPlugin<Injector>(INJECTOR_NAME);
      if (inj && extr) {
         container = new FlowContainer(-1, capacity, extr, inj);
      }
@@ -351,8 +351,8 @@ void NewContainerDialog::setBidirectionalSwitchDescription() {
 
  ExecutableContainerNode* NewContainerDialog::createDivergentSwitch(float capacity) {
      ExecutableContainerNode* container = NULL;
-     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<Extractor> extr = extractPlugin<Extractor>(EXTRACTOR_NAME);
+     std::shared_ptr<Control> ctr = extractPlugin<Control>(CONTROL_1_NAME);
      if (extr && ctr) {
         container = new DivergentSwitch(-1, capacity, extr, ctr);
      }
@@ -361,8 +361,8 @@ void NewContainerDialog::setBidirectionalSwitchDescription() {
 
  ExecutableContainerNode* NewContainerDialog::createConvergentSwitch(float capacity) {
      ExecutableContainerNode* container = NULL;
-     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
-     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<Injector> inj = extractPlugin<Injector>(INJECTOR_NAME);
+     std::shared_ptr<Control> ctr = extractPlugin<Control>(CONTROL_1_NAME);
      if (inj && ctr) {
         container = new ConvergentSwitch(-1, capacity, inj, ctr);
      }
@@ -371,9 +371,9 @@ void NewContainerDialog::setBidirectionalSwitchDescription() {
 
  ExecutableContainerNode* NewContainerDialog::createDivergentSwitchSink(float capacity) {
      ExecutableContainerNode* container = NULL;
-     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
-     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<Extractor> extr = extractPlugin<Extractor>(EXTRACTOR_NAME);
+     std::shared_ptr<Injector> inj = extractPlugin<Injector>(INJECTOR_NAME);
+     std::shared_ptr<Control> ctr = extractPlugin<Control>(CONTROL_1_NAME);
      if (extr && ctr && inj) {
         container = new DivergentSwitchSink(-1, capacity, inj, extr, ctr);
      }
@@ -382,9 +382,9 @@ void NewContainerDialog::setBidirectionalSwitchDescription() {
 
  ExecutableContainerNode* NewContainerDialog::createConvergentSwitchInlet(float capacity) {
      ExecutableContainerNode* container = NULL;
-     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
-     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<Extractor> extr = extractPlugin<Extractor>(EXTRACTOR_NAME);
+     std::shared_ptr<Injector> inj = extractPlugin<Injector>(INJECTOR_NAME);
+     std::shared_ptr<Control> ctr = extractPlugin<Control>(CONTROL_1_NAME);
 
      if (extr && ctr && inj) {
         container = new ConvergentSwitchInlet(-1, capacity, inj, extr, ctr);
@@ -394,10 +394,10 @@ void NewContainerDialog::setBidirectionalSwitchDescription() {
 
  ExecutableContainerNode* NewContainerDialog::createBidirectionalSwitch(float capacity) {
      ExecutableContainerNode* container = NULL;
-     std::shared_ptr<ExtractorPlugin> extr = extractPlugin<ExtractorPlugin>(EXTRACTOR_NAME);
-     std::shared_ptr<InjectorPlugin> inj = extractPlugin<InjectorPlugin>(INJECTOR_NAME);
-     std::shared_ptr<ControlPlugin> ctr = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
-     std::shared_ptr<ControlPlugin> ctr2 = extractPlugin<ControlPlugin>(CONTROL_1_NAME);
+     std::shared_ptr<Extractor> extr = extractPlugin<Extractor>(EXTRACTOR_NAME);
+     std::shared_ptr<Injector> inj = extractPlugin<Injector>(INJECTOR_NAME);
+     std::shared_ptr<Control> ctr = extractPlugin<Control>(CONTROL_1_NAME);
+     std::shared_ptr<Control> ctr2 = extractPlugin<Control>(CONTROL_2_NAME);
      if (extr && ctr && ctr2 && inj) {
         container = new BidirectionalSwitch(-1, capacity, extr, inj, ctr, ctr2);
      }

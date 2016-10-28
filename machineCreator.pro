@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     gui/newcontainerdialog.cpp \
     gui/idemitingpushbutton.cpp \
     gui/cretefilesenderdialog.cpp \
-    gui/createserialsenderdialog.cpp
+    gui/createserialsenderdialog.cpp \
+    gui/connectcontainerdialog.cpp
 HEADERS  += mainwindow.h \
     gui/customcontaineritem.h \
     gui/customedgegraphicsitem.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     gui/newcontainerdialog.h \
     gui/idemitingpushbutton.h \
     gui/cretefilesenderdialog.h \
-    gui/createserialsenderdialog.h
+    gui/createserialsenderdialog.h \
+    gui/connectcontainerdialog.h
 
 FORMS    += mainwindow.ui
 

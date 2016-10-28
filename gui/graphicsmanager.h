@@ -33,6 +33,8 @@ public:
     CustomContainerItem* addContainer(std::shared_ptr<ExecutableContainerNode> container);
     void connectContainers(CustomContainerItem* container1, CustomContainerItem* container2);
 
+    std::shared_ptr<ExecutableContainerNode> getExecutableContainer(CustomContainerItem* graphicContainer);
+
     void removeElement(QGraphicsItem* item);
 
     void exportMachineGraph(const QString & path);
