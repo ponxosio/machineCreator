@@ -108,14 +108,6 @@ std::shared_ptr<Control> ConnectContainerDialog::getSourceControlActuator(std::s
         std::shared_ptr<DivergentSwitchSink> cast = castContainer<DivergentSwitchSink>(source);
         controlActuator = cast->getControl();
         break;
-    }case ContainerType::convergent_switch : {
-        std::shared_ptr<ConvergentSwitch> cast = castContainer<ConvergentSwitch>(source);
-        controlActuator = cast->getControl();
-        break;
-    }case ContainerType::convergent_switch_inlet : {
-        std::shared_ptr<ConvergentSwitchInlet> cast = castContainer<ConvergentSwitchInlet>(source);
-        controlActuator = cast->getControl();
-        break;
     }case ContainerType::bidirectional_switch : {
         std::shared_ptr<BidirectionalSwitch> cast = castContainer<BidirectionalSwitch>(source);
         controlActuator = cast->getControlOut();
@@ -130,15 +122,7 @@ std::shared_ptr<Control> ConnectContainerDialog::getTargetControlActuator(std::s
     ContainerType containerType = target->getType()->getContainerType();
 
     switch(containerType) {
-    case ContainerType::divergent_switch : {
-        std::shared_ptr<DivergentSwitch> cast = castContainer<DivergentSwitch>(target);
-        controlActuator = cast->getControl();
-        break;
-    }case ContainerType::divergent_switch_sink : {
-        std::shared_ptr<DivergentSwitchSink> cast = castContainer<DivergentSwitchSink>(target);
-        controlActuator = cast->getControl();
-        break;
-    }case ContainerType::convergent_switch : {
+    case ContainerType::convergent_switch : {
         std::shared_ptr<ConvergentSwitch> cast = castContainer<ConvergentSwitch>(target);
         controlActuator = cast->getControl();
         break;
