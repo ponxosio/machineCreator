@@ -99,6 +99,7 @@ void GraphicsManager::removeElement(QGraphicsItem* item) {
 
 void GraphicsManager::exportMachineGraph(const QString & path) {
     ExecutableMachineGraph::toJSON(path.toUtf8().constData(), machine);
+    machine.printMachine("machineSketch.graph");
 }
 
 void GraphicsManager::importMachine(ExecutableMachineGraph* machine) {

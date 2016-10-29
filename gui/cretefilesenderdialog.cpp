@@ -64,8 +64,8 @@ void CreteFileSenderDialog::searchInFile() {
 }
 
 void CreteFileSenderDialog::ok() {
-    std::unique_ptr<CommandSender> test = std::unique_ptr<CommandSender>(new FileSender(inEdit->text().toUtf8().constData(),
-                                                                         outEdit->text().toUtf8().constData()));
+    std::unique_ptr<CommandSender> test = std::unique_ptr<CommandSender>(new FileSender(outEdit->text().toUtf8().constData(),
+                                                                         inEdit->text().toUtf8().constData()));
     manager->setTestPrototype(std::move(test));
     accept();
 }
