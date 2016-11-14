@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #define ICON_PATH "ico/"
-#define VERSION 0.1
+#define VERSION 0.02
 
 #include <QMainWindow>
 #include <QGraphicsPixmapItem>
