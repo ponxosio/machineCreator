@@ -89,8 +89,8 @@ std::vector<QStandardItem*> PluginManager::getAllSuperClassItems() {
 void PluginManager::importMachine(ExecutableMachineGraph* machine) {
     unordered_set<std::shared_ptr<SelfConfiguringPlugin>> pluginSet;
 
-    ExecutableMachineGraph::ExecutableContainerNodeVectorPtr nodes = machine->getGraph()->getAllNodes();
-    for (ExecutableMachineGraph::ExecutableContainerNodePtr actualNode: *(nodes.get())) {
+    ExecutableMachineGraph::NodeVectorPtr nodes = machine->getGraph()->getAllNodes();
+    for (ExecutableMachineGraph::NodePtr actualNode: *(nodes.get())) {
         if (std::dynamic_pointer_cast<InletContainer>(actualNode)) {
             importInlet(std::dynamic_pointer_cast<InletContainer>(actualNode), pluginSet);
         } else if (std::dynamic_pointer_cast<SinkContainer>(actualNode)) {

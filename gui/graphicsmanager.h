@@ -31,7 +31,12 @@ public:
 
     CustomContainerItem* addContainer(const std::string & name, std::shared_ptr<ExecutableContainerNode> container);
     CustomContainerItem* addContainer(std::shared_ptr<ExecutableContainerNode> container);
-    void connectContainers(CustomContainerItem* container1, CustomContainerItem* container2);
+    void connectContainers(CustomContainerItem* container1,
+                           CustomContainerItem* container2,
+                           const ConditionalFlowEdge::AllowedEdgeSet & allowedSet);
+    void connectContainers(CustomContainerItem* container1,
+                           CustomContainerItem* container2,
+                           const QString & allowedStr);
 
     std::shared_ptr<ExecutableContainerNode> getExecutableContainer(CustomContainerItem* graphicContainer);
 
@@ -51,12 +56,15 @@ public slots:
 protected:
     QGraphicsScene* scene;
     ExecutableMachineGraph machine;
-    QHash<CustomContainerItem*,std::shared_ptr<ExecutableContainerNode>> nodesMap;
-    QHash<CustomEdgeGraphicsItem*,std::shared_ptr<Edge>> edgesMap;
+    QHash<CustomContainerItem*, ExecutableMachineGraph::NodePtr> nodesMap;
+    QHash<QString, int> aliasIdMap;
+    QHash<CustomEdgeGraphicsItem*,ExecutableMachineGraph::EdgePtr> edgesMap;
     AutoEnumerate serial;
 
     void removeContainer(CustomContainerItem* container1);
     void removeEdge(CustomEdgeGraphicsItem* edge);
+
+    ConditionalFlowEdge::AllowedEdgeSet makeAllowedSet(const QString & allowedStr) throw (std::invalid_argument);
 };
 
 #endif // GRAPHICSMANAGER_H

@@ -13,6 +13,7 @@
 #include <QHashIterator>
 #include <QLabel>
 #include <QPushButton>
+#include <QLineEdit>
 
 //local
 #include "fluidControl/executable/containers/actuators/liquids/Control.h"
@@ -34,6 +35,9 @@ public:
     ConnectContainerDialog(std::shared_ptr<ExecutableContainerNode> source, std::shared_ptr<ExecutableContainerNode> target, QWidget* parent = 0, Qt::WindowFlags f = 0) ;
     virtual ~ConnectContainerDialog();
 
+    inline const QString & getConditionalEdges() {
+        return conditionalEdges;
+    }
 public slots:
     void ok();
     void cancel();
@@ -57,6 +61,9 @@ protected:
 
     std::shared_ptr<Control> getSourceControlActuator(std::shared_ptr<ExecutableContainerNode> source);
     std::shared_ptr<Control> getTargetControlActuator(std::shared_ptr<ExecutableContainerNode> target);
+
+    QLineEdit* conditionalEdgesEdit;
+    QString conditionalEdges;
 
     template<class E>
     std::shared_ptr<E> castContainer(std::shared_ptr<ExecutableContainerNode> node) throw (std::invalid_argument) {

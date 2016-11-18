@@ -207,7 +207,9 @@ void MainWindow::exportMachine() {
                                                             this, Qt::WindowTitleHint);
 
                  if (controlConfigDialog.exec() == QDialog::Accepted) {
-                    manager->connectContainers(temp1Container, temp2Container);
+                    manager->connectContainers(temp1Container,
+                                               temp2Container,
+                                               controlConfigDialog.getConditionalEdges());
                  }
                  status = AplicationStatus::normal;
                  ui->statusBar->showMessage("Ready");

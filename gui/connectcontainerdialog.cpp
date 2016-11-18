@@ -11,6 +11,7 @@ ConnectContainerDialog::ConnectContainerDialog(std::shared_ptr<ExecutableContain
 
     this->sourceControl = getSourceControlActuator(source);
     this->targetControl = getTargetControlActuator(target);
+    this->conditionalEdgesEdit = new QLineEdit();
 
     QGridLayout* mainLayout = new QGridLayout(this);
 
@@ -22,8 +23,10 @@ ConnectContainerDialog::ConnectContainerDialog(std::shared_ptr<ExecutableContain
 
     mainLayout->addWidget(sourceBox, 0, 0);
     mainLayout->addWidget(targetBox, 0, 1);
-    mainLayout->addWidget(acpt, 1, 0);
-    mainLayout->addWidget(cncl, 1, 1);
+    mainLayout->addWidget(new QLabel("allowed previous edges(i->j[;i'->j'])"), 1, 0);
+    mainLayout->addWidget(conditionalEdgesEdit, 1, 1);
+    mainLayout->addWidget(acpt, 2, 0);
+    mainLayout->addWidget(cncl, 2, 1);
 
     connect(acpt, SIGNAL(clicked(bool)), this, SLOT(ok()));
     connect(cncl, SIGNAL(clicked(bool)), this, SLOT(cancel()));
@@ -49,7 +52,7 @@ void ConnectContainerDialog::ok() {
         pos += itTarget.value();
         targetControl->addConnection(idSource, idTarget, pos);
     }
-
+    conditionalEdges = conditionalEdgesEdit->text();
     accept();
 }
 
